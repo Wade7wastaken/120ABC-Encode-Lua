@@ -24,7 +24,7 @@ template = {
 	y = 0,
 	w = 500,
 	h = 500,
-	border = {size = 5, color = "#FFFFFFFF"},
+	border = { size = 5, color = "#FFFFFFFF" },
 	background = "#000000FF"
 }
 
@@ -55,26 +55,27 @@ function Map.draw()
 		if data.state == 2 then
 			data.w = input.get().xmouse
 			data.h = input.get().ymouse
-			
+
 			-- draw background
-			wgui.fillrecta(data.x - data.border.size, data.y - data.border.size, data.w + (2 * data.border.size), data.h + (2 * data.border.size), data.border.color)
+			wgui.fillrecta(data.x - data.border.size, data.y - data.border.size, data.w + (2 * data.border.size),
+				data.h + (2 * data.border.size), data.border.color)
 			wgui.fillrecta(data.x, data.y, data.w, data.h, data.background)
-			
+
 			-- render map
 			local mapfname = "Images/Maps/" .. data.data.name .. ".png"
-			
+
 			local imageinfo = Image.getinfo(mapfname)
-			
+
 			-- aspect ratio
 			--if data.w > data.h then
-				--local ar = data.w / data.h
+			--local ar = data.w / data.h
 			--else
-				--local ar = data.h / data.w
+			--local ar = data.h / data.w
 			--end
-			
+
 			local ar = math.max(data.w, data.h) / math.min(data.w, data.h)
 			print(ar)
-			
+
 			wgui.drawimage(Image.get(mapfname), data.x, data.y, data.w, data.h,
 				data.data.x - (imagesize / (2 * data.data.zoom)), data.data.y - (imagesize / (2 * data.data.zoom * ar)),
 				(imagesize / data.data.zoom), (imagesize / (ar * data.data.zoom)), 0)
@@ -83,15 +84,19 @@ function Map.draw()
 				local fname = "Images/Objects/Mario Top.png"
 				local v = imagesize / (data.w * data.data.zoom)
 				wgui.drawimage(Image.get(fname),
-					round((((((imagesize / (2 *      data.data.zoom)) - data.data.x) / v) + data.x) + ((375 * (Memory.read("mariox") + 8191)) / (4096 * v))) - (Image.getinfo(fname).width  * iconscale / 2)),
-					round((((((imagesize / (2 * ar * data.data.zoom)) - data.data.y) / v) + data.y) + ((375 * (Memory.read("marioz") + 8191)) / (4096 * v))) - (Image.getinfo(fname).height * iconscale / 2)),
+					round((
+						((((imagesize / (2 * data.data.zoom)) - data.data.x) / v) + data.x) +
+							((375 * (Memory.read("mariox") + 8191)) / (4096 * v))) - (Image.getinfo(fname).width * iconscale / 2)),
+					round((
+						((((imagesize / (2 * ar * data.data.zoom)) - data.data.y) / v) + data.y) +
+							((375 * (Memory.read("marioz") + 8191)) / (4096 * v))) - (Image.getinfo(fname).height * iconscale / 2)),
 					iconscale)
 			end
 		end
-		
+
 		::continue::
 	end
-	
+
 end
 
 function Map.deactivate(idx)

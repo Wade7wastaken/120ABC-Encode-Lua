@@ -80,20 +80,20 @@ function atinterval()
 		end
 		drawing = not drawing
 	end
-	
+
 	-- reset the a press counter if the home button is pressed
 	if ((not prev_input["home"]) and (input.get()["home"])) then
 		print("Resetting A press counter")
 		a_presses = 0
 	end
-	
+
 	-- get the previous input for the next frame
 	prev_input = input.get()
 end
 
 function atvi()
 	vi = emu.framecount() + 1 -- ¯\_(ツ)_/¯
-	
+
 	if drawing then
 		Draw.main() -- main draw loop. Very important to keep in vi, not interval, so it syncs up when dumping avi
 		--Map.draw() -- a special version of mupen is required for this function https://github.com/Wade7wastaken/mupen64-rr-lua-/tree/dev
@@ -109,11 +109,11 @@ function atinput()
 	if Joypad.A and not prev_Joypad.A then -- a press counter logic
 		a_presses = a_presses + 1
 	end
-	
+
 	-- i still need to rewrite the slot code
-	
+
 	Slots.clearAll()
-	
+
 	-- refills the slots with the correct values for the current frame
 	for idx, value in ipairs(slotidx) do -- for every slot change in slotidx
 		if value <= frame then -- if the change happened before the current frame
@@ -130,7 +130,7 @@ function atinput()
 			break
 		end
 	end
-	
+
 	if set_values then
 		local inc_segments = false -- used so the segment counter won't be incremented more than once per frame
 		local rngdata = rng[frame]
@@ -139,14 +139,14 @@ function atinput()
 			print("Setting RNG to " .. rngdata)
 			inc_segments = true
 		end
-		
+
 		local globtdata = globt[frame]
 		if globtdata ~= nil then
 			Memory.write("globaltimer", Memory.read("globaltimer") + globtdata)
 			print("Changing global timer by " .. globtdata)
 			inc_segments = true
 		end
-		
+
 		local otherdata = otherc[frame]
 		if otherdata ~= nil then
 			for index, value in ipairs(otherdata) do
@@ -155,14 +155,14 @@ function atinput()
 			end
 			inc_segments = true
 		end
-		
+
 		if inc_segments then
 			segments = segments + 1
 		end
 	end
-	
+
 	Draw.author.author = findAuthor(frame, author, authoridx)
-	
+
 	prev_Joypad = Joypad
 end
 
@@ -190,7 +190,7 @@ Map.map1.state = 2
 Map.map1.h = 300
 Map.map1.x = 100
 Map.map1.y = 100
-Map.map1.data = {zoom = 1, x = 750, y = 750, name = "Castle Grounds", mario = true}
+Map.map1.data = { zoom = 1, x = 750, y = 750, name = "Castle Grounds", mario = true }
 
 vi = 0
 frame = 0
@@ -198,7 +198,7 @@ a_presses = 0
 segments = 1
 prev_input = input.get() -- initialized here so there's no nil error later
 Joypad = joypad.get(1)
-prev_Joypad = {A = false}
+prev_Joypad = { A = false }
 
 if drawing then
 	Screen.expand()

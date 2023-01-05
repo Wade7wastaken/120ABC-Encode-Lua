@@ -92,8 +92,8 @@ Memory = {
 		}
 	},
 	objmap = {
-		next_obj = {addr = 0x08, size = 4}, -- {offset, size (0 is float)}
-		X = {addr = 0xA0, size = 0}
+		next_obj = { addr = 0x08, size = 4 }, -- {offset, size (0 is float)}
+		X = { addr = 0xA0, size = 0 }
 	}
 }
 ---@return integer|number
@@ -108,18 +108,18 @@ function Memory.read(location, s) -- s is for reading from decomp
 		local size
 		if Memory.decomp.addr[location].size ~= nil then size = Memory.decomp.addr[location].size end
 		if s ~= nil then size = s end -- prioritize this
-		
+
 		if size == nil then
 			print("Size for " .. location .. "could not be found. Using 4 byte non-float")
 			size = 4
 		end
-		
+
 		if size == 0 then
 			return memory.readfloat(Memory.decomp.addr[location].addr)
 		else
 			return memory.readsize(Memory.decomp.addr[location].addr, size)
 		end
-		
+
 	else
 		print("Failed to find memory location " .. location)
 		return 0
@@ -176,19 +176,19 @@ function Memory.loadDecompAddrs(version)
 		local t = {}
 		local l = line:gsub(",", " ") -- replace commas with spaces
 		l = l:gsub("^%s*(.-)%s*$", "%1") -- trim the string
-		
-		sep = "%s" -- default seperator
-		for str in string.gmatch(l, "([^".. sep .."]+)") do -- split the string into a table
+
+		local sep = "%s" -- default seperator
+		for str in string.gmatch(l, "([^" .. sep .. "]+)") do -- split the string into a table
 			table.insert(t, str)
 		end
-		
+
 		if #t ~= 2 then goto continue end
 		if t[1]:sub(1, 10) ~= "0x00000000" then goto continue end
-		
+
 		t[1] = "0x" .. t[1]:sub(11) -- cut out the first 10 characters and add a "0x"
-		
-		Memory.decomp.addr[t[2]] = {addr = tonumber(t[1]), name = t[2]}
-		
+
+		Memory.decomp.addr[t[2]] = { addr = tonumber(t[1]), name = t[2] }
+
 		::continue::
 	end
 end
