@@ -1,8 +1,16 @@
 -- Look at Screen.lua before running this script
 
+--[[
+	Formatting guidelines:
+	Global variables and functions use Pascal Case. Ex: ThisIsAFunction(), GlobalVariable
+	Local variables and functions use Snake Case. Ex: local this_is_a_function(), local cool_variable
+	Settings use Screaming Snake Case. Ex: DRAWING_ENABLED
+	Try to minimize the use of global variables. If a variable doesn't need to be used outside a function, mark it as local
+]]
+
 -- SETTINGS
-drawing = true
-set_values = true
+DRAWING = true
+SET_VALUES = true
 
 
 -- CHANGES
@@ -71,14 +79,14 @@ end
 
 -- AT FUNCTIONS
 function atinterval()
-	-- toggle drawing if the end button is pressed
+	-- toggle DRAWING if the end button is pressed
 	if ((not prev_input["end"]) and (input.get()["end"])) then
-		if drawing then
+		if DRAWING then
 			Screen.contract()
 		else
 			Screen.expand()
 		end
-		drawing = not drawing
+		DRAWING = not DRAWING
 	end
 
 	-- reset the a press counter if the home button is pressed
@@ -94,7 +102,7 @@ end
 function atvi()
 	vi = emu.framecount() + 1 -- ¯\_(ツ)_/¯
 
-	if drawing then
+	if DRAWING then
 		Draw.main() -- main draw loop. Very important to keep in vi, not interval, so it syncs up when dumping avi
 		--Map.draw() -- a special version of mupen is required for this function https://github.com/Wade7wastaken/mupen64-rr-lua-/tree/dev
 	end
@@ -131,7 +139,7 @@ function atinput()
 		end
 	end
 
-	if set_values then
+	if SET_VALUES then
 		local inc_segments = false -- used so the segment counter won't be incremented more than once per frame
 		local rngdata = rng[frame]
 		if rngdata ~= nil then
@@ -167,7 +175,7 @@ function atinput()
 end
 
 function atstop()
-	if drawing then
+	if DRAWING then
 		Screen.contract()
 	end
 end
@@ -200,11 +208,11 @@ prev_input = input.get() -- initialized here so there's no nil error later
 Joypad = joypad.get(1)
 prev_Joypad = { A = false }
 
-if drawing then
+if DRAWING then
 	Screen.expand()
 end
 
 emu.atinterval(atinterval) -- ran continously
-emu.atvi(atvi) -- ran every visual interupt (drawing happens here)
+emu.atvi(atvi) -- ran every visual interupt (DRAWING happens here)
 emu.atinput(atinput) -- ran every input frame
 emu.atstop(atstop) -- ran when the script is stopped
