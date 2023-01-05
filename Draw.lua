@@ -311,7 +311,7 @@ function Draw.slot(slot)
 		wgui.drawtext(string.format("%.0f %.0f %.0f", Memory.read("holpx"), Memory.read("holpy"), Memory.read("holpz")), {l = Draw.slots.x + Draw.slots.x_offset, t = Draw.slots.start_y + (slot * Draw.slots.y_offset), w = 400, h = 100}, "l")
 	elseif Slots[slot].var == "slidespeed" then
 		wgui.drawtext("Sliding Speed", {l = Draw.slots.x, t = Draw.slots.start_y + (slot * Draw.slots.y_offset), w = Draw.slots.x_offset, h = 100}, "l")
-		wgui.drawtext(string.format("%.3f", math.sqrt(math.pow(Memory.read("xslidespeed"), 2) + math.pow(Memory.read("zslidespeed"), 2))), {l = Draw.slots.x + Draw.slots.x_offset, t = Draw.slots.start_y + (slot * Draw.slots.y_offset), w = 400, h = 100}, "l")
+		wgui.drawtext(string.format("%.3f", math.sqrt(Memory.read("xslidespeed") ^ 2 + Memory.read("zslidespeed") ^ 2)), {l = Draw.slots.x + Draw.slots.x_offset, t = Draw.slots.start_y + (slot * Draw.slots.y_offset), w = 400, h = 100}, "l")
 	else
 		wgui.drawtext(Memory.addr[Slots[slot].var].name, {l = Draw.slots.x, t = Draw.slots.start_y + (slot * Draw.slots.y_offset), w = Draw.slots.x_offset, h = 100}, "l")
 		local style = nil
@@ -336,8 +336,8 @@ function Draw.calc_stick_points() -- calculates the points for the "stick" polyg
 	-- adds and subtracts 2 pi to get the perpendicular angles
 	local jx = Joypad.X * round(Draw.cstick.size / 2) / 128
 	local jy = Joypad.Y * round(Draw.cstick.size / 2) / 128
-	local anglep = math.atan2(jy, jx) + (math.pi / 2)
-	local anglem = math.atan2(jy, jx) - (math.pi / 2)
+	local anglep = math.atan(jy, jx) + (math.pi / 2)
+	local anglem = math.atan(jy, jx) - (math.pi / 2)
 	return {{
 		round(Draw.cstick.x + (math.cos(anglep) * Draw.cstick.stick.thickness)),
 		round(Draw.cstick.y - (math.sin(anglep) * Draw.cstick.stick.thickness))
