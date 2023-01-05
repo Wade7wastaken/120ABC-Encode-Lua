@@ -17,7 +17,7 @@ States:
 local imagesize = 1500 -- the size of the map images
 local iconscale = 0.25
 
-template = {
+local template = {
 	state = 0,
 	data = {},
 	x = 0,
@@ -36,10 +36,10 @@ Map = {
 }
 
 function Map.init()
-	copy_table(template, Map.map1)
-	copy_table(template, Map.map2)
-	copy_table(template, Map.map3)
-	copy_table(template, Map.map4)
+	CopyTable(template, Map.map1)
+	CopyTable(template, Map.map2)
+	CopyTable(template, Map.map3)
+	CopyTable(template, Map.map4)
 
 	--wgui.loadimage(PATH .. "Maps\\Lua Maps\\Castle Grounds.png")
 	--wgui.loadimage(PATH .. "Maps\\Mario Top.png")
@@ -84,10 +84,10 @@ function Map.draw()
 				local fname = "Images/Objects/Mario Top.png"
 				local v = imagesize / (data.w * data.data.zoom)
 				wgui.drawimage(Image.get(fname),
-					round((
+					Round((
 						((((imagesize / (2 * data.data.zoom)) - data.data.x) / v) + data.x) +
 							((375 * (Memory.read("mariox") + 8191)) / (4096 * v))) - (Image.getinfo(fname).width * iconscale / 2)),
-					round((
+					Round((
 						((((imagesize / (2 * ar * data.data.zoom)) - data.data.y) / v) + data.y) +
 							((375 * (Memory.read("marioz") + 8191)) / (4096 * v))) - (Image.getinfo(fname).height * iconscale / 2)),
 					iconscale)

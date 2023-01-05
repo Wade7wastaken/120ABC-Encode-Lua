@@ -9,8 +9,8 @@ function Screen.init()
 	if Screen.width ~= math.floor(Screen.width) then
 
 		print("Current resolution cannot scale to 16:9.")
-		print("Using " .. round(Screen.width) .. " instead of " .. Screen.width)
-		Screen.width = round(Screen.width)
+		print("Using " .. Round(Screen.width) .. " instead of " .. Screen.width)
+		Screen.width = Round(Screen.width)
 	end
 
 	Screen.height = Screen.init_height - 24 -- This number will vary between computers, it is the size of the bottom toolbar of the mupen window, if you can't figure out what this number is for your system, ask me for help

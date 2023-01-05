@@ -4,42 +4,42 @@ Draw = {
 	background = "#303030",
 	backgrounda = "#303030FF",
 	timer = {
-		y = round(m * 875),
+		y = Round(m * 875),
 		active = true,
-		font_size = round(m * 70),
+		font_size = Round(m * 70),
 		font = "Calibri",
 		style = "a",
 		color = "#FFFFFF",
 		stopped_color = "#AAFFAA"
 	},
 	cstick = {
-		x = Screen.start + round(m * 240), -- 1680
-		y = round(m * 795),
-		size = round(m * 150),
+		x = Screen.start + Round(m * 240), -- 1680
+		y = Round(m * 795),
+		size = Round(m * 150),
 		circle = {
-			thickness = round(m * 2),
+			thickness = Round(m * 2),
 			color = "#AAAAAA"
 		},
 		axis = {
 			color = "#AAAAAA"
 		},
 		border = {
-			thickness = round(m * 3),
+			thickness = Round(m * 3),
 			color = "#FFFFFFFF"
 		},
 		stick = {
-			thickness = round(m * 3),
+			thickness = Round(m * 3),
 			color = "#FFAAAAFF"
 		},
 		ball = {
-			radius = round(m * 5),
+			radius = Round(m * 5),
 			color = "#3333FFFF"
 		},
 		display = {
-			x_offset = round(m * 85),
-			y_offset = round(m * -27),
-			distance = round(m * 30),
-			font_size = round(m * 24),
+			x_offset = Round(m * 85),
+			y_offset = Round(m * -27),
+			distance = Round(m * 30),
+			font_size = Round(m * 24),
 			font = "Courier New",
 			style = "ba",
 			text_color = "#FF3333",
@@ -48,102 +48,102 @@ Draw = {
 	buttons = {
 		border = "#FFFFFFFF",
 		text_color = "#FFFFFF",
-		thickness = round(m * 4)
+		thickness = Round(m * 4)
 	},
 	a = {
-		x = Screen.start + round(m * 310), -- 1750
-		y = round(m * 650),
-		radius = round(m * 30),
+		x = Screen.start + Round(m * 310), -- 1750
+		y = Round(m * 650),
+		radius = Round(m * 30),
 		color = "#FF7777FF",
-		font_size = round(m * 32),
+		font_size = Round(m * 32),
 		font = "Calibri",
 		style = "a",
-		x_offset = round(m * -11),
-		y_offset = round(m * -27)
+		x_offset = Round(m * -11),
+		y_offset = Round(m * -27)
 	},
 	b = {
-		x = Screen.start + round(m * 240), -- 1680
-		y = round(m * 650),
-		radius = round(m * 30),
+		x = Screen.start + Round(m * 240), -- 1680
+		y = Round(m * 650),
+		radius = Round(m * 30),
 		color = "#00C000FF",
-		font_size = round(m * 32),
+		font_size = Round(m * 32),
 		font = "Calibri",
 		style = "a",
-		x_offset = round(m * -11),
-		y_offset = round(m * -27)
+		x_offset = Round(m * -11),
+		y_offset = Round(m * -27)
 	},
 	s = {
-		x = Screen.start + round(m * 275), -- 1715
-		y = round(m * 590),
-		radius = round(m * 30),
+		x = Screen.start + Round(m * 275), -- 1715
+		y = Round(m * 590),
+		radius = Round(m * 30),
 		color = "#4444FFFF",
-		font_size = round(m * 32),
+		font_size = Round(m * 32),
 		font = "Calibri",
 		style = "a",
-		x_offset = round(m * -9),
-		y_offset = round(m * -27)
+		x_offset = Round(m * -9),
+		y_offset = Round(m * -27)
 	},
 	z = {
-		x = Screen.start + round(m * 160), -- 1600
-		y = round(m * 630),
-		w = round(m * 50),
-		h = round(m * 100),
+		x = Screen.start + Round(m * 160), -- 1600
+		y = Round(m * 630),
+		w = Round(m * 50),
+		h = Round(m * 100),
 		color = "#888888FF",
-		font_size = round(m * 32),
+		font_size = Round(m * 32),
 		font = "Calibri",
 		style = "a",
-		x_offset = round(m * -11),
-		y_offset = round(m * -27)
+		x_offset = Round(m * -11),
+		y_offset = Round(m * -27)
 	},
 	cbuttons = {
-		x = Screen.start + round(m * 180), -- 1620
-		y = round(m * 500),
-		radius = round(m * 20),
+		x = Screen.start + Round(m * 180), -- 1620
+		y = Round(m * 500),
+		radius = Round(m * 20),
 		color = "#00FFFFFF",
-		offset = round(m * 40),
+		offset = Round(m * 40),
 		text_color = "#FFFFFF",
-		font_size = round(m * 32),
+		font_size = Round(m * 32),
 		font = "Calibri",
 		style = "a",
-		text_offset = { round(m * -12), round(m * -26) },
-		triangle_thickness = round(m * 5),
-		triangle_size = round(m * 12)
+		text_offset = { Round(m * -12), Round(m * -26) },
+		triangle_thickness = Round(m * 5),
+		triangle_size = Round(m * 12)
 	},
 	r = {
-		x = Screen.start + round(m * 310), -- 1750
-		y = round(m * 500),
-		w = round(m * 100),
-		h = round(m * 50),
+		x = Screen.start + Round(m * 310), -- 1750
+		y = Round(m * 500),
+		w = Round(m * 100),
+		h = Round(m * 50),
 		color = "#888888FF",
-		font_size = round(m * 32),
+		font_size = Round(m * 32),
 		font = "Calibri",
 		style = "a",
-		x_offset = round(m * -11),
-		y_offset = round(m * -27)
+		x_offset = Round(m * -11),
+		y_offset = Round(m * -27)
 	},
 	apress = {
-		y = round(m * 50),
-		font_size = round(m * 70),
+		y = Round(m * 50),
+		font_size = Round(m * 70),
 		font = "Calibri",
 		style = "a",
 		text_color = "#FFFFFF",
-		height = round(m * 100),
-		offset = round(m * 100)
+		height = Round(m * 100),
+		offset = Round(m * 100)
 	},
 	slots = {
-		x = Screen.start + round(m * 50), -- 1490
-		start_y = round(m * 260),
-		y_offset = round(m * 40),
-		x_offset = round(m * 190),
-		font_size = round(m * 24),
+		x = Screen.start + Round(m * 50), -- 1490
+		start_y = Round(m * 260),
+		y_offset = Round(m * 40),
+		x_offset = Round(m * 190),
+		font_size = Round(m * 24),
 		font = "Calibri",
 		style = "a",
 		text_color = "#FFFFFF",
 	},
 	author = {
 		author = "",
-		y = round(m * 985),
-		font_size = round(m * 24),
+		y = Round(m * 985),
+		font_size = Round(m * 24),
 		font = "Calibri",
 		style = "a",
 		text_color = "#FFFFFF"
@@ -159,7 +159,7 @@ function Draw.main()
 	wgui.setfont(Draw.timer.font_size, Draw.timer.font, Draw.timer.style)
 	if Draw.timer.active then
 		wgui.setcolor(Draw.timer.color)
-		Draw.time = vi
+		Draw.time = VI
 	else
 		wgui.setcolor(Draw.timer.stopped_color)
 	end
@@ -185,8 +185,8 @@ function Draw.main()
 	Draw.fillcircle(Draw.cstick.x, Draw.cstick.y, Draw.cstick.stick.thickness, Draw.cstick.stick.color)
 
 	-- Draw ball
-	Draw.fillcircle(Draw.cstick.x + (Joypad.X * round(Draw.cstick.size / 2) / 128),
-		Draw.cstick.y - (Joypad.Y * round(Draw.cstick.size / 2) / 128), Draw.cstick.ball.radius, Draw.cstick.ball.color)
+	Draw.fillcircle(Draw.cstick.x + (Joypad.X * Round(Draw.cstick.size / 2) / 128),
+		Draw.cstick.y - (Joypad.Y * Round(Draw.cstick.size / 2) / 128), Draw.cstick.ball.radius, Draw.cstick.ball.color)
 
 	-- Draw c stick display
 	wgui.setfont(Draw.cstick.display.font_size, Draw.cstick.display.font, Draw.cstick.display.style)
@@ -221,14 +221,14 @@ function Draw.main()
 	-- Draw a press counter
 	Draw.set_text("apress")
 	wgui.drawtext("A Presses:", { l = Screen.init_width, t = Draw.apress.y, w = Screen.extra_width, h = 100 }, "c")
-	wgui.drawtext(string.format("%d", a_presses),
+	wgui.drawtext(string.format("%d", APresses),
 		{ l = Screen.init_width, t = Draw.apress.y + Draw.apress.offset, w = Screen.extra_width, h = 100 }, "c")
 
 
 	-- Draw variable slots and segment counter
 	Draw.set_text("slots")
 	wgui.drawtext("Segment", { l = Draw.slots.x, t = Draw.slots.start_y, w = Draw.slots.x_offset, h = 100 }, "l")
-	wgui.drawtext(string.format("%d", segments),
+	wgui.drawtext(string.format("%d", Segments),
 		{ l = Draw.slots.x + Draw.slots.x_offset, t = Draw.slots.start_y, w = 400, h = 100 }, "l")
 	for i = 1, 3, 1 do
 		if Slots[i].occupied then
@@ -265,24 +265,24 @@ end
 
 function Draw.triangle(x, y, length, angle, thickness, inner_color, border_color) -- draws a triangle with a border
 	wgui.fillpolygona({ {
-		round(x + (math.cos((math.pi / 2) + angle) * length)),
-		round(y - (math.sin((math.pi / 2) + angle) * length))
+		Round(x + (math.cos((math.pi / 2) + angle) * length)),
+		Round(y - (math.sin((math.pi / 2) + angle) * length))
 	}, {
-		round(x + (math.cos((7 / 6 * math.pi) + angle) * length)),
-		round(y - (math.sin((7 / 6 * math.pi) + angle) * length))
+		Round(x + (math.cos((7 / 6 * math.pi) + angle) * length)),
+		Round(y - (math.sin((7 / 6 * math.pi) + angle) * length))
 	}, {
-		round(x + (math.cos((11 / 6 * math.pi) + angle) * length)),
-		round(y - (math.sin((11 / 6 * math.pi) + angle) * length))
+		Round(x + (math.cos((11 / 6 * math.pi) + angle) * length)),
+		Round(y - (math.sin((11 / 6 * math.pi) + angle) * length))
 	} }, border_color)
 	wgui.fillpolygona({ {
-		round(x + (math.cos((math.pi / 2) + angle) * (length - thickness))),
-		round(y - (math.sin((math.pi / 2) + angle) * (length - thickness)))
+		Round(x + (math.cos((math.pi / 2) + angle) * (length - thickness))),
+		Round(y - (math.sin((math.pi / 2) + angle) * (length - thickness)))
 	}, {
-		round(x + (math.cos((7 / 6 * math.pi) + angle) * (length - thickness))),
-		round(y - (math.sin((7 / 6 * math.pi) + angle) * (length - thickness)))
+		Round(x + (math.cos((7 / 6 * math.pi) + angle) * (length - thickness))),
+		Round(y - (math.sin((7 / 6 * math.pi) + angle) * (length - thickness)))
 	}, {
-		round(x + (math.cos((11 / 6 * math.pi) + angle) * (length - thickness))),
-		round(y - (math.sin((11 / 6 * math.pi) + angle) * (length - thickness)))
+		Round(x + (math.cos((11 / 6 * math.pi) + angle) * (length - thickness))),
+		Round(y - (math.sin((11 / 6 * math.pi) + angle) * (length - thickness)))
 	} }, inner_color)
 end
 
@@ -369,25 +369,25 @@ end
 function Draw.calc_stick_points() -- calculates the points for the "stick" polygon
 	-- finds the angle the stick makes with the x-axis
 	-- adds and subtracts 2 pi to get the perpendicular angles
-	local jx = Joypad.X * round(Draw.cstick.size / 2) / 128
-	local jy = Joypad.Y * round(Draw.cstick.size / 2) / 128
+	local jx = Joypad.X * Round(Draw.cstick.size / 2) / 128
+	local jy = Joypad.Y * Round(Draw.cstick.size / 2) / 128
 	local anglep = math.atan(jy, jx) + (math.pi / 2)
 	local anglem = math.atan(jy, jx) - (math.pi / 2)
 	return { {
-		round(Draw.cstick.x + (math.cos(anglep) * Draw.cstick.stick.thickness)),
-		round(Draw.cstick.y - (math.sin(anglep) * Draw.cstick.stick.thickness))
+		Round(Draw.cstick.x + (math.cos(anglep) * Draw.cstick.stick.thickness)),
+		Round(Draw.cstick.y - (math.sin(anglep) * Draw.cstick.stick.thickness))
 	},
 		{
-			round(Draw.cstick.x + (math.cos(anglep) * Draw.cstick.stick.thickness) + jx),
-			round(Draw.cstick.y - (math.sin(anglep) * Draw.cstick.stick.thickness) - jy)
+			Round(Draw.cstick.x + (math.cos(anglep) * Draw.cstick.stick.thickness) + jx),
+			Round(Draw.cstick.y - (math.sin(anglep) * Draw.cstick.stick.thickness) - jy)
 		},
 		{
-			round(Draw.cstick.x + (math.cos(anglem) * Draw.cstick.stick.thickness) + jx),
-			round(Draw.cstick.y - (math.sin(anglem) * Draw.cstick.stick.thickness) - jy)
+			Round(Draw.cstick.x + (math.cos(anglem) * Draw.cstick.stick.thickness) + jx),
+			Round(Draw.cstick.y - (math.sin(anglem) * Draw.cstick.stick.thickness) - jy)
 		},
 		{
-			round(Draw.cstick.x + (math.cos(anglem) * Draw.cstick.stick.thickness)),
-			round(Draw.cstick.y - (math.sin(anglem) * Draw.cstick.stick.thickness))
+			Round(Draw.cstick.x + (math.cos(anglem) * Draw.cstick.stick.thickness)),
+			Round(Draw.cstick.y - (math.sin(anglem) * Draw.cstick.stick.thickness))
 		} }
 end
 
@@ -395,6 +395,6 @@ function Draw.calc_timer(vis) -- converts vi (60 fps) to h:m:s:ms
 	local h = vis // 216000
 	local m = (vis // 3600) - (h * 60)
 	local s = (vis // 60) - (m * 60) - (h * 3600)
-	local ms = round((vis * 5 / 3) - (s * 100) - (m * 6000) - (h * 360000))
+	local ms = Round((vis * 5 / 3) - (s * 100) - (m * 6000) - (h * 360000))
 	return string.format("%02d:%02d:%02d.%02d", h, m, s, ms)
 end

@@ -4,7 +4,7 @@
 	Formatting guidelines:
 	Global variables and functions use Pascal Case. Ex: ThisIsAFunction(), GlobalVariable
 	Local variables and functions use Snake Case. Ex: local this_is_a_function(), local cool_variable
-	Settings use Screaming Snake Case. Ex: DRAWING_ENABLED
+	Settings and other very important global variables use Screaming Snake Case. Ex: DRAWING_ENABLED, PATH
 	Try to minimize the use of global variables. If a variable doesn't need to be used outside a function, mark it as local
 ]]
 
@@ -14,59 +14,60 @@ SET_VALUES = true
 
 
 -- CHANGES
-slotc = {} -- slot changes
+SlotChanges = {}
 -- Can't do anything before 157, each frame is a table of changes.
 -- change format = {action, value} where action is 1 (add) or 2 (remove) and value is the input to that function
--- ex: Slotc[200] = {{1, "hspeed"}, {1, "action"}}
+-- ex: SlotChanges[200] = {{1, "hspeed"}, {1, "action"}}
 
 -- slots are broken rn
---slotc[2182] = {{1, "hspeed"}, {1, "holp"}}
---slotc[94161] = {{2, 1}, {2, 1}}
---slotc[109621] = {{1, "hspeed"}, {1, "slidespeed"}}
---slotc[111994] = {{2, 1}, {2, 1}}
+--SlotChanges[2182] = {{1, "hspeed"}, {1, "holp"}}
+--SlotChanges[94161] = {{2, 1}, {2, 1}}
+--SlotChanges[109621] = {{1, "hspeed"}, {1, "slidespeed"}}
+--SlotChanges[111994] = {{2, 1}, {2, 1}}
 
-rng = {} -- rng changes
+RNGChanges = {} -- sets the rng to the value
 
-rng[2182] = 48413
-rng[103409] = 10
+RNGChanges[2182] = 48413
+RNGChanges[103409] = 10
 
-globt = {} -- global timer changes. Adds the value to the global timer
+GlobalTimerChanges = {} -- Adds the value to the global timer
 
-globt[2182] = 42
-globt[103409] = 4
+GlobalTimerChanges[2182] = 42
+GlobalTimerChanges[103409] = 4
 
-otherc = {} -- other changes ex: {{"holpx", 100}, {"holpy", 200}, {"holpz", 300}}
+OtherChanges = {} -- Cx: {{"holpx", 100}, {"holpy", 200}, {"holpz", 300}}
 
 
 
-author = {}
+Author = {}
 
-author[0] = "70ABC"
-author[2182] = "Pannenkoek2012"
-author[94161] = "Wade7"
-author[98797] = "70ABC"
-author[103040] = "Wade7"
-author[103409] = "Pannenkoek2012"
-author[108776] = "Wade7"
-author[109309] = "70ABC"
+Author[0] = "70ABC"
+Author[2182] = "Pannenkoek2012"
+Author[94161] = "Wade7"
+Author[98797] = "70ABC"
+Author[103040] = "Wade7"
+Author[103409] = "Pannenkoek2012"
+Author[108776] = "Wade7"
+Author[109309] = "70ABC"
 
-authoridx = {}
 
-for k, _ in pairs(author) do -- generates a linear table with only the indicies from the author table
-	table.insert(authoridx, k)
+AuthorIndicies = {}
+
+for k, _ in pairs(Author) do -- generates a linear table with only the indicies from the author table
+	table.insert(AuthorIndicies, k)
 end
 
-table.sort(authoridx)
+table.sort(AuthorIndicies)
 
-slotidx = {}
+SlotIndicies = {}
 
-for k, _ in pairs(slotc) do -- same thing as the previous loop
-	table.insert(slotidx, k)
+for k, _ in pairs(SlotChanges) do -- same thing as the previous loop
+	table.insert(SlotIndicies, k)
 end
-table.sort(slotidx)
+table.sort(SlotIndicies)
 
 -- finds the author on a given frame
-function findAuthor(frame, t, idxt) -- frame, table, idxtable
+function FindAuthor(frame, t, idxt) -- frame, table, idxtable
 	local prev = nil -- the previous checked frame
 	for _, v in ipairs(idxt) do -- for every author change in the index table
 		if frame < v then -- if the frame of that author change if more than the current frame
@@ -78,9 +79,9 @@ function findAuthor(frame, t, idxt) -- frame, table, idxtable
 end
 
 -- AT FUNCTIONS
-function atinterval()
+function AtInterval()
 	-- toggle DRAWING if the end button is pressed
-	if ((not prev_input["end"]) and (input.get()["end"])) then
+	if ((not PreviousInput["end"]) and (input.get()["end"])) then
 		if DRAWING then
 			Screen.contract()
 		else
@@ -90,17 +91,17 @@ function atinterval()
 	end
 
 	-- reset the a press counter if the home button is pressed
-	if ((not prev_input["home"]) and (input.get()["home"])) then
+	if ((not PreviousInput["home"]) and (input.get()["home"])) then
 		print("Resetting A press counter")
-		a_presses = 0
+		APresses = 0
 	end
 
 	-- get the previous input for the next frame
-	prev_input = input.get()
+	PreviousInput = input.get()
 end
 
-function atvi()
-	vi = emu.framecount() + 1 -- ¯\_(ツ)_/¯
+function AtVI()
+	VI = emu.framecount() + 1 -- ¯\_(ツ)_/¯
 
 	if DRAWING then
 		Draw.main() -- main draw loop. Very important to keep in vi, not interval, so it syncs up when dumping avi
@@ -108,14 +109,14 @@ function atvi()
 	end
 end
 
-function atinput()
-	frame = emu.samplecount() + 1 -- ¯\_(ツ)_/¯
+function AtInput()
+	Frame = emu.samplecount() + 1 -- ¯\_(ツ)_/¯
 	Joypad = joypad.get(1) -- get the joypad input from the first controller
 	if Memory.read('action') == 6409 then -- end cutscene action
 		Draw.timer.active = false -- stop the timer when the grand star is collected
 	end
-	if Joypad.A and not prev_Joypad.A then -- a press counter logic
-		a_presses = a_presses + 1
+	if Joypad.A and not PreviousJoypad.A then -- a press counter logic
+		APresses = APresses + 1
 	end
 
 	-- i still need to rewrite the slot code
@@ -123,9 +124,9 @@ function atinput()
 	Slots.clearAll()
 
 	-- refills the slots with the correct values for the current frame
-	for idx, value in ipairs(slotidx) do -- for every slot change in slotidx
-		if value <= frame then -- if the change happened before the current frame
-			local slotdata = slotc[value] -- gets the actuall changes for that frame
+	for _, value in ipairs(SlotIndicies) do -- for every slot change in SlotIndicies
+		if value <= Frame then -- if the change happened before the current frame
+			local slotdata = SlotChanges[value] -- gets the actuall changes for that frame
 			for idx2, value2 in ipairs(slotdata) do -- for every change in that change
 				if value2[1] == 1 then
 					Slots.add(value2[2])
@@ -141,21 +142,21 @@ function atinput()
 
 	if SET_VALUES then
 		local inc_segments = false -- used so the segment counter won't be incremented more than once per frame
-		local rngdata = rng[frame]
+		local rngdata = RNGChanges[Frame]
 		if rngdata ~= nil then
 			Memory.write("rng", rngdata)
 			print("Setting RNG to " .. rngdata)
 			inc_segments = true
 		end
 
-		local globtdata = globt[frame]
-		if globtdata ~= nil then
-			Memory.write("globaltimer", Memory.read("globaltimer") + globtdata)
-			print("Changing global timer by " .. globtdata)
+		local global_timer_data = GlobalTimerChanges[Frame]
+		if global_timer_data ~= nil then
+			Memory.write("globaltimer", Memory.read("globaltimer") + global_timer_data)
+			print("Changing global timer by " .. global_timer_data)
 			inc_segments = true
 		end
 
-		local otherdata = otherc[frame]
+		local otherdata = OtherChanges[Frame]
 		if otherdata ~= nil then
 			for index, value in ipairs(otherdata) do
 				Memory.write(value[1], value[2])
@@ -165,16 +166,16 @@ function atinput()
 		end
 
 		if inc_segments then
-			segments = segments + 1
+			Segments = Segments + 1
 		end
 	end
 
-	Draw.author.author = findAuthor(frame, author, authoridx)
+	Draw.author.author = FindAuthor(Frame, Author, AuthorIndicies)
 
-	prev_Joypad = Joypad
+	PreviousJoypad = Joypad
 end
 
-function atstop()
+function AtStop()
 	if DRAWING then
 		Screen.contract()
 	end
@@ -200,19 +201,19 @@ Map.map1.x = 100
 Map.map1.y = 100
 Map.map1.data = { zoom = 1, x = 750, y = 750, name = "Castle Grounds", mario = true }
 
-vi = 0
-frame = 0
-a_presses = 0
-segments = 1
-prev_input = input.get() -- initialized here so there's no nil error later
+VI = 0
+Frame = 0
+APresses = 0
+Segments = 1
+PreviousInput = input.get() -- initialized here so there's no nil error later
 Joypad = joypad.get(1)
-prev_Joypad = { A = false }
+PreviousJoypad = { A = false }
 
 if DRAWING then
 	Screen.expand()
 end
 
-emu.atinterval(atinterval) -- ran continously
-emu.atvi(atvi) -- ran every visual interupt (DRAWING happens here)
-emu.atinput(atinput) -- ran every input frame
-emu.atstop(atstop) -- ran when the script is stopped
+emu.atinterval(AtInterval) -- ran continously
+emu.atvi(AtVI) -- ran every visual interupt (DRAWING happens here)
+emu.atinput(AtInput) -- ran every input frame
+emu.atstop(AtStop) -- ran when the script is stopped

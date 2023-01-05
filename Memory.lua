@@ -168,7 +168,7 @@ end
 
 function Memory.loadDecompAddrs(version)
 	local fname = PATH .. Memory.decomp["MapLocation" .. version]
-	if not file_exists(fname) then
+	if not CheckFileExists(fname) then
 		print("File doesn't exist: " .. fname)
 		return
 	end
