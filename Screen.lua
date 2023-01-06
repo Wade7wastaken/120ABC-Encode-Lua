@@ -3,6 +3,7 @@ Screen = {
 	init_height = wgui.info().height,
 }
 
+---Initializes the Screen module
 function Screen.init()
 	Screen.width = 4 / 3 * Screen.init_width -- chose this factor because it gets 1440x1080 to 1920x1080
 
@@ -19,10 +20,12 @@ function Screen.init()
 	Screen.middle = Screen.init_width + (Screen.extra_width / 2)
 end
 
+---Expands the screen
 function Screen.expand()
 	wgui.resize(Screen.width, Screen.init_height)
 end
 
+---Contracts the screen back to the original dimensions
 function Screen.contract()
 	wgui.resize(Screen.init_width, Screen.init_height)
 end

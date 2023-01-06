@@ -16,6 +16,7 @@ SET_VALUES = true
 
 
 -- CHANGES
+---@type table<integer, table<integer, string|integer>>
 SlotChanges = {}
 -- Can't do anything before 157, each frame is a table of changes
 -- change format = {action, value} where action is 1 (add) or 2 (remove) and value is the input to that function
@@ -27,6 +28,7 @@ SlotChanges = {}
 --SlotChanges[109621] = {{1, "hspeed"}, {1, "slidespeed"}}
 --SlotChanges[111994] = {{2, 1}, {2, 1}}
 
+---@type table<integer, integer>
 RNGChanges = {} -- sets the rng to the value
 
 RNGChanges[2182] = 48413
