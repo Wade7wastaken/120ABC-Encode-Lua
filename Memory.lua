@@ -97,7 +97,9 @@ Memory = {
 	}
 }
 ---@return integer|number
-function Memory.read(location, s) -- s is for reading from decomp
+---@param location string The location or name of the variable
+---@param s? integer The size of a demop variable
+function Memory.read(location, s)
 	if Memory.addr[location] ~= nil then
 		if Memory.addr[location].size == 0 then
 			return memory.readfloat(Memory.addr[location][Memory.version])

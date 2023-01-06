@@ -6,6 +6,8 @@
 	Local variables and functions use Snake Case. Ex: local this_is_a_function(), local cool_variable
 	Settings and other very important global variables use Screaming Snake Case. Ex: DRAWING_ENABLED, PATH
 	Try to minimize the use of global variables. If a variable doesn't need to be used outside a function, mark it as local
+	Every function should have annotations giving the types of its parameters and returns
+	A function's description should be put above the annotations
 ]]
 
 -- SETTINGS
@@ -15,7 +17,7 @@ SET_VALUES = true
 
 -- CHANGES
 SlotChanges = {}
--- Can't do anything before 157, each frame is a table of changes.
+-- Can't do anything before 157, each frame is a table of changes
 -- change format = {action, value} where action is 1 (add) or 2 (remove) and value is the input to that function
 -- ex: SlotChanges[200] = {{1, "hspeed"}, {1, "action"}}
 
@@ -35,7 +37,7 @@ GlobalTimerChanges = {} -- Adds the value to the global timer
 GlobalTimerChanges[2182] = 42
 GlobalTimerChanges[103409] = 4
 
-OtherChanges = {} -- Cx: {{"holpx", 100}, {"holpy", 200}, {"holpz", 300}}
+OtherChanges = {} -- Ex: {{"holpx", 100}, {"holpy", 200}, {"holpz", 300}}
 
 
 
@@ -51,24 +53,28 @@ Author[108776] = "Wade7"
 Author[109309] = "70ABC"
 
 
-AuthorIndicies = {}
+AuthorIndices = {}
 
-for k, _ in pairs(Author) do -- generates a linear table with only the indicies from the author table
-	table.insert(AuthorIndicies, k)
+for k, _ in pairs(Author) do -- generates a linear table with only the indices from the author table
+	table.insert(AuthorIndices, k)
 end
 
-table.sort(AuthorIndicies)
+table.sort(AuthorIndices)
 
-SlotIndicies = {}
+SlotIndices = {}
 
 for k, _ in pairs(SlotChanges) do -- same thing as the previous loop
-	table.insert(SlotIndicies, k)
+	table.insert(SlotIndices, k)
 end
-table.sort(SlotIndicies)
+table.sort(SlotIndices)
 
--- finds the author on a given frame
-function FindAuthor(frame, t, idxt) -- frame, table, idxtable
-	local prev = nil -- the previous checked frame
+---Finds the author on a given frame
+---@param frame integer The frame to find the author on
+---@param t table The table of Authors
+---@param idxt table The index table of authors
+---@return string author The author for a given frame
+function FindAuthor(frame, t, idxt)
+	local prev = nil -- the previously checked frame
 	for _, v in ipairs(idxt) do -- for every author change in the index table
 		if frame < v then -- if the frame of that author change if more than the current frame
 			return t[prev] -- return the frame of the previous author change
@@ -79,6 +85,8 @@ function FindAuthor(frame, t, idxt) -- frame, table, idxtable
 end
 
 -- AT FUNCTIONS
+
+---This function is run continuously. It is registered at the bottom of this page
 function AtInterval()
 	-- toggle DRAWING if the end button is pressed
 	if ((not PreviousInput["end"]) and (input.get()["end"])) then
@@ -100,15 +108,17 @@ function AtInterval()
 	PreviousInput = input.get()
 end
 
+---This function is run for every VI. It is registered at the bottom of the frame
 function AtVI()
 	VI = emu.framecount() + 1 -- ¯\_(ツ)_/¯
 
 	if DRAWING then
-		Draw.main() -- main draw loop. Very important to keep in vi, not interval, so it syncs up when dumping avi
+		Draw.main() -- main draw loop. Very important to keep in vi, not interval, so it syncs when dumping avi
 		--Map.draw() -- a special version of mupen is required for this function https://github.com/Wade7wastaken/mupen64-rr-lua-/tree/dev
 	end
 end
 
+---This function is run for every input frame. It is registered at the bottom of this page
 function AtInput()
 	Frame = emu.samplecount() + 1 -- ¯\_(ツ)_/¯
 	Joypad = joypad.get(1) -- get the joypad input from the first controller
@@ -119,14 +129,14 @@ function AtInput()
 		APresses = APresses + 1
 	end
 
-	-- i still need to rewrite the slot code
+	-- i need to rewrite the slot code
 
 	Slots.clearAll()
 
 	-- refills the slots with the correct values for the current frame
-	for _, value in ipairs(SlotIndicies) do -- for every slot change in SlotIndicies
+	for _, value in ipairs(SlotIndices) do -- for every slot change in SlotIndicies
 		if value <= Frame then -- if the change happened before the current frame
-			local slotdata = SlotChanges[value] -- gets the actuall changes for that frame
+			local slotdata = SlotChanges[value] -- gets the actual changes for that frame
 			for idx2, value2 in ipairs(slotdata) do -- for every change in that change
 				if value2[1] == 1 then
 					Slots.add(value2[2])
@@ -135,7 +145,7 @@ function AtInput()
 					Slots.remove(value2[2])
 				end
 			end
-		else -- if the change happenes after the current frame, break cause we're done
+		else -- if the change happens after the current frame, break cause we're done
 			break
 		end
 	end
@@ -170,11 +180,12 @@ function AtInput()
 		end
 	end
 
-	Draw.author.author = FindAuthor(Frame, Author, AuthorIndicies)
+	Draw.author.author = FindAuthor(Frame, Author, AuthorIndices)
 
 	PreviousJoypad = Joypad
 end
 
+---This function is run when the lua program is stopped. It is registered at the bottom of the page
 function AtStop()
 	if DRAWING then
 		Screen.contract()
@@ -213,7 +224,7 @@ if DRAWING then
 	Screen.expand()
 end
 
-emu.atinterval(AtInterval) -- ran continously
-emu.atvi(AtVI) -- ran every visual interupt (DRAWING happens here)
+emu.atinterval(AtInterval) -- ran continuously
+emu.atvi(AtVI) -- ran every visual interrupt (DRAWING happens here)
 emu.atinput(AtInput) -- ran every input frame
 emu.atstop(AtStop) -- ran when the script is stopped

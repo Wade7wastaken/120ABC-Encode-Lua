@@ -1,3 +1,9 @@
 {
-	"Lua.diagnostics.globals": ["wgui", "emu", "input", "joypad", "memory"]
+	"Lua.diagnostics.globals": ["wgui", "emu", "input", "joypad", "memory"],
+	"cSpell.enableFiletypes": ["lua"],
+	"cSpell.diagnosticLevel": "Hint",
+	"workbench.colorCustomizations": {
+		// changees the color of three dots to red
+		"editorHint.foreground": "#ff5a5aa0",
+	}
 }
