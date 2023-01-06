@@ -1,8 +1,8 @@
 ---Rounds a number according to standard rounding rules
----@param x number|integer The number to be rounded
+---@param a number|integer The number to be rounded
 ---@return integer output The rounded number
-function Round(x)
-	return math.floor(x + 0.5)
+function Round(a)
+	return math.floor(a + 0.5)
 end
 
 ---Copies a table to another table

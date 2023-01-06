@@ -155,7 +155,6 @@ function Draw.main()
 	-- Clear the screen
 	wgui.fillrecta(Screen.start, 0, Screen.extra_width, Screen.height, Draw.backgrounda)
 
-
 	-- Draw timer
 	wgui.setfont(Draw.timer.font_size, Draw.timer.font, Draw.timer.style)
 	if Draw.timer.active then
@@ -291,6 +290,14 @@ function Draw.fillcircle(x, y, r, color)
 	wgui.fillellipsea(x - r, y - r, r * 2, r * 2, color)
 end
 
+---Draws the border of an equilateral triangle. This function will overwrite the middle of the triangle
+---@param x integer The x-coordinate of the center of the triangle
+---@param y integer The y-coordinate of the center of the triangle
+---@param length integer The length of the triangle's side lengths
+---@param angle integer|number The angle in radians that the triangle is rotated
+---@param thickness integer The thickness of the border
+---@param inner_color string The color of the middle of the triangle
+---@param border_color string The color of the border
 function Draw.triangle(x, y, length, angle, thickness, inner_color, border_color) -- draws a triangle with a border
 	wgui.fillpolygona({ {
 		Round(x + (math.cos((math.pi / 2) + angle) * length)),
@@ -421,8 +428,8 @@ end
 
 function Draw.calc_timer(vis) -- converts vi (60 fps) to h:m:s:ms
 	local h = vis // 216000
-	local m = (vis // 3600) - (h * 60)
-	local s = (vis // 60) - (m * 60) - (h * 3600)
-	local ms = Round((vis * 5 / 3) - (s * 100) - (m * 6000) - (h * 360000))
+	local min = (vis // 3600) - (h * 60)
+	local s = (vis // 60) - (min * 60) - (h * 3600)
+	local ms = Round((vis * 5 / 3) - (s * 100) - (min * 6000) - (h * 360000))
 	return string.format("%02d:%02d:%02d.%02d", h, m, s, ms)
 end
