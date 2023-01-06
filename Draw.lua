@@ -150,6 +150,7 @@ Draw = {
 	}
 }
 
+---The main drawing function
 function Draw.main()
 	-- Clear the screen
 	wgui.fillrecta(Screen.start, 0, Screen.extra_width, Screen.height, Draw.backgrounda)
@@ -168,7 +169,7 @@ function Draw.main()
 
 
 	-- Draw c stick
-	Draw.circle(Draw.cstick.x, Draw.cstick.y, Draw.cstick.size / 2, Draw.cstick.circle.thickness, Draw.background,
+	Draw.circle_border(Draw.cstick.x, Draw.cstick.y, Draw.cstick.size / 2, Draw.cstick.circle.thickness, Draw.background,
 		Draw.cstick.circle.color)
 
 	-- Draw axes
@@ -177,7 +178,7 @@ function Draw.main()
 	wgui.line(Draw.cstick.x, Draw.cstick.y - (Draw.cstick.size / 2), Draw.cstick.x, Draw.cstick.y + (Draw.cstick.size / 2))
 
 	-- Draw border
-	Draw.border(Draw.cstick.x, Draw.cstick.y, Draw.cstick.size, Draw.cstick.size, Draw.cstick.border.thickness,
+	Draw.border_transparent(Draw.cstick.x, Draw.cstick.y, Draw.cstick.size, Draw.cstick.size, Draw.cstick.border.thickness,
 		Draw.cstick.border.color)
 
 	-- Draw stick
@@ -242,24 +243,51 @@ end
 
 -- Shape drawing functions
 
-function Draw.border(x, y, w, h, b, color) -- Draws a border using 4 rectangles (doesn't overwrite middle)
-	wgui.fillrecta(x - (w / 2), y - (h / 2), b, h, color)
-	wgui.fillrecta(x - (w / 2) + b, y + (h / 2) - b, w - (b * 2), b, color)
-	wgui.fillrecta(x + (w / 2) - b, y - (h / 2), b, h, color)
-	wgui.fillrecta(x - (w / 2) + b, y - (h / 2), w - (b * 2), b, color)
+---Draws a border around a rectangle using 4 draws, but doesn't overwrite the middle. The border is drawn on the inside of the rectangle
+---@param x integer The x-coordinate in pixels of the middle of the rectangle from the top left of the screen
+---@param y integer The y-coordinate in pixels of the middle of the rectangle from the top left of the screen
+---@param w integer The width of the rectangle in pixels
+---@param h integer The height of the rectangle in pixels
+---@param thickness integer The size of the border in pixels. The border is drawn completely inside the rectangle
+---@param color string The color of the border
+function Draw.border_transparent(x, y, w, h, thickness, color)
+	wgui.fillrecta(x - (w / 2), y - (h / 2), thickness, h, color)
+	wgui.fillrecta(x - (w / 2) + thickness, y + (h / 2) - thickness, w - (thickness * 2), thickness, color)
+	wgui.fillrecta(x + (w / 2) - thickness, y - (h / 2), thickness, h, color)
+	wgui.fillrecta(x - (w / 2) + thickness, y - (h / 2), w - (thickness * 2), thickness, color)
 end
 
-function Draw.border2(x, y, w, h, thickness, inner_color, border_color) -- Draws a border using 2 overlapping rectangles (overwrites middle)
+---Draws a border around a rectangle using 2 draws. This function will overwrite the middle of the rectangle. The border is drawn on the inside of the rectangle
+---@param x integer The x-coordinate in pixels of the middle of the rectangle from the top left of the screen
+---@param y integer The y-coordinate in pixels of the middle of the rectangle from the top left of the screen
+---@param w integer The width of the rectangle in pixels
+---@param h integer The height of the rectangle in pixels
+---@param thickness integer The size of the border in pixels. The border is drawn completely inside the rectangle
+---@param inner_color string The color of the overwritten middle part of the rectangle
+---@param border_color string The color of the border
+function Draw.border(x, y, w, h, thickness, inner_color, border_color)
 	wgui.fillrecta(x - (w / 2), y - (h / 2), w, h, border_color)
 	wgui.fillrecta(x - (w / 2) + thickness, y - (h / 2) + thickness, w - (thickness * 2), h - (thickness * 2), inner_color)
 end
 
-function Draw.circle(x, y, r, thickness, inner_color, border_color) -- Draws a circle border (overwrites middle)
+---Draws a border around a circle in 2 draws. This function will overwrite the middle of the circle
+---@param x integer The x-coordinate in pixels of the middle of the circle from the top left of the screen
+---@param y integer The y-coordinate in pixels of the middle of the circle from the top left of the screen
+---@param r integer The radius of the circle in pixels
+---@param thickness integer The size of the border in pixels. The border is drawn completely inside the circle
+---@param inner_color string The color of the overwritten middle part of the rectangle
+---@param border_color string The color of the border
+function Draw.circle_border(x, y, r, thickness, inner_color, border_color)
 	wgui.fillellipsea(x - r, y - r, r * 2, r * 2, border_color)
-	wgui.fillellipsea(x - (r - thickness), y - (r - thickness), (r - thickness) * 2, (r - thickness) * 2, inner_color)
+	wgui.fillellipsea(x - r + thickness, y - r + thickness, (r - thickness) * 2, (r - thickness) * 2, inner_color)
 end
 
-function Draw.fillcircle(x, y, r, color) -- Draws a filled in circle
+---Draws a filled in circle
+---@param x integer The x-coordinate in pixels of the middle of the circle from the top left of the screen
+---@param y integer The y-coordinate in pixels of the middle of the circle from the top left of the screen
+---@param r integer The radius of the circle in pixels
+---@param color string The color of the circle
+function Draw.fillcircle(x, y, r, color)
 	wgui.fillellipsea(x - r, y - r, r * 2, r * 2, color)
 end
 
@@ -291,19 +319,19 @@ end
 function Draw.button(button, button_name, text, ty) -- Draws a button and text
 	if ty == 0 then -- circle
 		if Joypad[button_name] then
-			Draw.circle(Draw[button].x, Draw[button].y, Draw[button].radius, Draw.buttons.thickness, Draw[button].color,
+			Draw.circle_border(Draw[button].x, Draw[button].y, Draw[button].radius, Draw.buttons.thickness, Draw[button].color,
 				Draw.buttons.border)
 		else
-			Draw.circle(Draw[button].x, Draw[button].y, Draw[button].radius, Draw.buttons.thickness, Draw.backgrounda,
+			Draw.circle_border(Draw[button].x, Draw[button].y, Draw[button].radius, Draw.buttons.thickness, Draw.backgrounda,
 				Draw.buttons.border)
 		end
 	end
 	if ty == 1 then -- square
 		if Joypad[button_name] then
-			Draw.border2(Draw[button].x, Draw[button].y, Draw[button].w, Draw[button].h, Draw.buttons.thickness,
+			Draw.border(Draw[button].x, Draw[button].y, Draw[button].w, Draw[button].h, Draw.buttons.thickness,
 				Draw[button].color, Draw.buttons.border)
 		else
-			Draw.border2(Draw[button].x, Draw[button].y, Draw[button].w, Draw[button].h, Draw.buttons.thickness, Draw.backgrounda
+			Draw.border(Draw[button].x, Draw[button].y, Draw[button].w, Draw[button].h, Draw.buttons.thickness, Draw.backgrounda
 				, Draw.buttons.border)
 		end
 	end
@@ -315,14 +343,14 @@ end
 
 function Draw.cbutton(joypad, offset_mult, angle)
 	if Joypad[joypad] then
-		Draw.circle(Draw.cbuttons.x + (Draw.cbuttons.offset * offset_mult[1]),
+		Draw.circle_border(Draw.cbuttons.x + (Draw.cbuttons.offset * offset_mult[1]),
 			Draw.cbuttons.y + (Draw.cbuttons.offset * offset_mult[2]), Draw.cbuttons.radius, Draw.buttons.thickness,
 			Draw.cbuttons.color, Draw.buttons.border)
 		Draw.triangle(Draw.cbuttons.x + (Draw.cbuttons.offset * offset_mult[1]),
 			Draw.cbuttons.y + (Draw.cbuttons.offset * offset_mult[2]), Draw.cbuttons.triangle_size, angle,
 			Draw.cbuttons.triangle_thickness, Draw.cbuttons.color, "black")
 	else
-		Draw.circle(Draw.cbuttons.x + (Draw.cbuttons.offset * offset_mult[1]),
+		Draw.circle_border(Draw.cbuttons.x + (Draw.cbuttons.offset * offset_mult[1]),
 			Draw.cbuttons.y + (Draw.cbuttons.offset * offset_mult[2]), Draw.cbuttons.radius, Draw.buttons.thickness,
 			Draw.backgrounda, Draw.buttons.border)
 		Draw.triangle(Draw.cbuttons.x + (Draw.cbuttons.offset * offset_mult[1]),
