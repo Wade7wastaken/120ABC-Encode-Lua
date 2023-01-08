@@ -22,3 +22,22 @@ function CheckFileExists(filename) -- checks if a file exists
 	if f then f:close() end
 	return f ~= nil
 end
+
+---Serializes a table with or without formatting
+---@param t table The input table to be Serialized
+---@param format? string Whether the table should be formatted using string.format. The number of directives must equal the number of elements in `t`
+---@return string serialized_table The serialized table
+function SerializeLinearTable(t, format)
+	local output = ""
+	if format == nil then
+		for i, v in ipairs(t) do
+			output = output .. tostring(v)
+			if i ~= #t then
+				output = output .. " "
+			end
+		end
+		return output
+	else
+		return string.format(format, table.unpack(t))
+	end
+end

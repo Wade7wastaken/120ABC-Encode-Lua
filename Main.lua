@@ -16,19 +16,15 @@ SET_VALUES = true
 
 
 -- CHANGES
----@type table<integer, table<integer, string|integer>>
 SlotChanges = {}
--- Can't do anything before 157, each frame is a table of changes
--- change format = {action, value} where action is 1 (add) or 2 (remove) and value is the input to that function
--- ex: SlotChanges[200] = {{1, "hspeed"}, {1, "action"}}
+-- Can't do anything before frame 157, each frame is a table of changes
+-- each change sets the variable of the corresponding slot. Setting a slot to an empty string disables it
 
--- slots are broken rn
---SlotChanges[2182] = {{1, "hspeed"}, {1, "holp"}}
---SlotChanges[94161] = {{2, 1}, {2, 1}}
---SlotChanges[109621] = {{1, "hspeed"}, {1, "slidespeed"}}
---SlotChanges[111994] = {{2, 1}, {2, 1}}
+SlotChanges[2182] = { { 1, "hspeed", "%.3f" }, { 2, "holp", "%.0f %.0f %.0f" } }
+SlotChanges[94161] = { { 1, "" }, { 2, "" } }
+SlotChanges[109621] = { { 1, "hspeed" }, { 2, "slidespeed" } }
+SlotChanges[111994] = { { 1, "" }, { 2, "" } }
 
----@type table<integer, integer>
 RNGChanges = {} -- sets the rng to the value
 
 RNGChanges[2182] = 48413
@@ -70,28 +66,23 @@ for k, _ in pairs(SlotChanges) do -- same thing as the previous loop
 end
 table.sort(SlotIndices)
 
----Finds the author on a given frame
----@param frame integer The frame to find the author on
----@param t table The table of Authors
----@param idxt table The index table of authors
----@return string author The author for a given frame
-function FindAuthor(frame, t, idxt)
-	local prev = nil -- the previously checked frame
-	for _, v in ipairs(idxt) do -- for every author change in the index table
-		if frame < v then -- if the frame of that author change if more than the current frame
-			return t[prev] -- return the frame of the previous author change
-		end
-		prev = v
+function FillSlots(frame, t, idxt)
+	Draw.slots.data = { { name = "", value = "" }, { name = "", value = "" }, { name = "", value = "" } } -- clear the slots
+	for i, v in ipairs(idxt) do
+		if frame < v then return end
+		local change = SlotChanges[v]
+		Draw.slots.data[change[1]] = change[2]
 	end
-	return t[idxt[#idxt]] -- return the last author change if the loop finishes
 end
 
 -- AT FUNCTIONS
 
 ---This function is run continuously. It is registered at the bottom of this page
 function AtInterval()
+	local current_input = input.get()
+	InputDiff = input.diff(current_input, PreviousInput)
 	-- toggle DRAWING if the end button is pressed
-	if ((not PreviousInput["end"]) and (input.get()["end"])) then
+	if InputDiff["end"] then -- cant use .end because end is a keyword
 		if DRAWING then
 			Screen.contract()
 		else
@@ -101,13 +92,13 @@ function AtInterval()
 	end
 
 	-- reset the a press counter if the home button is pressed
-	if ((not PreviousInput["home"]) and (input.get()["home"])) then
+	if InputDiff.home then
 		print("Resetting A press counter")
 		APresses = 0
 	end
 
 	-- get the previous input for the next frame
-	PreviousInput = input.get()
+	PreviousInput = current_input
 end
 
 ---This function is run for every VI. It is registered at the bottom of the frame
@@ -124,40 +115,20 @@ end
 function AtInput()
 	Frame = emu.samplecount() + 1 -- ¯\_(ツ)_/¯
 	Joypad = joypad.get(1) -- get the joypad input from the first controller
+	JoypadDiff = input.diff(Joypad, PreviousJoypad)
 	if Memory.read('action') == 6409 then -- end cutscene action
 		Draw.timer.active = false -- stop the timer when the grand star is collected
 	end
-	if Joypad.A and not PreviousJoypad.A then -- a press counter logic
+	if JoypadDiff.A then -- a press counter logic
 		APresses = APresses + 1
-	end
-
-	-- i need to rewrite the slot code
-
-	Slots.clearAll()
-
-	-- refills the slots with the correct values for the current frame
-	for _, value in ipairs(SlotIndices) do -- for every slot change in SlotIndicies
-		if value <= Frame then -- if the change happened before the current frame
-			local slotdata = SlotChanges[value] -- gets the actual changes for that frame
-			for idx2, value2 in ipairs(slotdata) do -- for every change in that change
-				if value2[1] == 1 then
-					Slots.add(value2[2])
-				end
-				if value2[1] == 2 then
-					Slots.remove(value2[2])
-				end
-			end
-		else -- if the change happens after the current frame, break cause we're done
-			break
-		end
 	end
 
 	if SET_VALUES then
 		local inc_segments = false -- used so the segment counter won't be incremented more than once per frame
-		local rngdata = RNGChanges[Frame]
-		if rngdata ~= nil then
-			Memory.write("rng", rngdata)
-			print("Setting RNG to " .. rngdata)
+		local rng_data = RNGChanges[Frame]
+		if rng_data ~= nil then
+			Memory.write("rng", rng_data)
+			print("Setting RNG to " .. rng_data)
 			inc_segments = true
 		end
 
@@ -168,9 +139,9 @@ function AtInput()
 			inc_segments = true
 		end
 
-		local otherdata = OtherChanges[Frame]
-		if otherdata ~= nil then
-			for index, value in ipairs(otherdata) do
+		local other_data = OtherChanges[Frame]
+		if other_data ~= nil then
+			for _, value in ipairs(other_data) do
 				Memory.write(value[1], value[2])
 				print("Setting " .. value[1] .. " to " .. value[2])
 			end
@@ -182,7 +153,45 @@ function AtInput()
 		end
 	end
 
-	Draw.author.author = FindAuthor(Frame, Author, AuthorIndices)
+	-- Finds the author on the current frame
+	Draw.author.author = nil
+	local prev = nil -- the previously checked frame
+	for _, v in ipairs(AuthorIndices) do -- for every author change in the index table
+		if Frame < v then -- if the frame of that author change if more than the current frame
+			Draw.author.author = Author[prev] -- set the author to the previous author change
+			break
+		end
+		prev = v
+	end
+	if Draw.author.author == nil then Draw.author.author = Author[AuthorIndices[#AuthorIndices]] end -- return the last author change if the loop finishes
+
+	Draw.slots.data = { { name = "", value = "" }, { name = "", value = "" }, { name = "", value = "" } } -- clear the slots
+	for _, v in ipairs(SlotIndices) do
+		if Frame < v then break end
+		for _, v2 in ipairs(SlotChanges[v]) do
+			if v2[2] ~= "" then
+				Draw.slots.data[v2[1]].name = Memory.get_display_name(v2[2])
+
+				local mem = Memory.read(v2[2])
+				local fmt = v2[3]
+
+				local p = (type(mem) == "table") -- did Memory return a table?
+				local q = (fmt ~= nil) -- is there formatting data?
+				local output = ""
+
+				if p and q then
+					output = SerializeLinearTable(mem, fmt)
+				elseif p and not q then
+					output = SerializeLinearTable(mem)
+				elseif not p and q then
+					output = string.format(fmt, mem)
+				elseif not p and not q then
+					output = tostring(mem)
+				end
+				Draw.slots.data[v2[1]].value = output
+			end
+		end
+	end
 
 	PreviousJoypad = Joypad
 end
@@ -200,11 +209,8 @@ dofile(PATH .. "Screen.lua")
 Screen.init() -- must be run before Draw
 dofile(PATH .. "Memory.lua")
 dofile(PATH .. "Draw.lua")
-dofile(PATH .. "Slots.lua")
 dofile(PATH .. "Map.lua")
 dofile(PATH .. "Image.lua")
-
-
 
 Memory.init()
 
@@ -219,8 +225,10 @@ Frame = 0
 APresses = 0
 Segments = 1
 PreviousInput = input.get() -- initialized here so there's no nil error later
+InputDiff = {} -- the difference in inputs between the previous and current frames
 Joypad = joypad.get(1)
 PreviousJoypad = { A = false }
+JoypadDiff = {}
 
 if DRAWING then
 	Screen.expand()

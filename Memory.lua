@@ -11,85 +11,101 @@ Memory = {
 			JP = 0x80339E3C,
 			US = 0x8033B1AC,
 			size = 0,
-			name = "X"
+			DisplayName = "X"
 		},
 		marioy = {
 			JP = 0x80339E40,
 			US = 0x8033B1B0,
 			size = 0,
-			name = "Y"
+			DisplayName = "Y"
 		},
 		marioz = {
 			JP = 0x80339E44,
 			US = 0x8033B1B4,
 			size = 0,
-			name = "Z"
+			DisplayName = "Z"
 		},
 		action = {
 			US = 0x8033B17C,
 			JP = 0x80339E0C,
 			size = 4,
-			name = "Action"
+			DisplayName = "Action"
 		},
 		hspeed = {
 			US = 0x8033B1C4,
 			JP = 0x80339E54,
 			size = 0,
-			name = "H Speed"
+			DisplayName = "H Speed"
 		},
 		xslidespeed = {
 			US = 0x8033B1C8,
 			JP = 0x80339E58,
 			size = 0,
-			name = "X Slide Speed"
+			DisplayName = "X Slide Speed"
 		},
 		zslidespeed = {
 			US = 0x8033B1CC,
 			JP = 0x80339E5C,
 			size = 0,
-			name = "Z Slide Speed"
+			DisplayName = "Z Slide Speed"
 		},
 		rng = {
 			US = 0x8038EEE0,
 			JP = 0x8038EEE0,
 			size = 2,
-			name = "RNG"
+			DisplayName = "RNG"
 		},
 		globaltimer = {
 			US = 0x8032D5D4,
 			JP = 0x8032C694,
 			size = 4,
-			name = "RNG"
+			DisplayName = "RNG"
 		},
 		holpx = {
 			US = 0x8033B3C8,
 			JP = 0x8033A058,
 			size = 0,
-			name = "HOLP X"
+			DisplayName = "HOLP X"
 		},
 		holpy = {
 			US = 0x8033B3CC,
 			JP = 0x8033A05C,
 			size = 0,
-			name = "HOLP Y"
+			DisplayName = "HOLP Y"
 		},
 		holpz = {
 			US = 0x8033B3D0,
 			JP = 0x8033A060,
 			size = 0,
-			name = "HOLP Z"
+			DisplayName = "HOLP Z"
 		},
 		angleface = {
 			US = 0x8033B19E,
 			JP = 0x80339E2E,
 			size = 2,
-			name = "Angle"
+			DisplayName = "Angle"
 		},
 		objpool = {
 			US = 0x8033D488,
 			JP = 0x8033C118,
 			size = 4,
-			name = "Object Pool Start Node"
+			DisplayName = "Object Pool Start Node"
+		}
+	},
+	special = { -- special memory functions
+		hslidespeed = {
+			process = function(t)
+				return math.sqrt((t[1] ^ 2) + (t[2] ^ 2))
+			end,
+			parameters = { "xslidespeed", "zslidespeed" },
+			DisplayName = "H Slide Speed"
+		},
+		holp = {
+			process = function (t)
+				return t
+			end,
+			parameters = {"holpx", "holpy", "holpz"},
+			DisplayName = "HOLP"
 		}
 	},
 	objmap = {
@@ -100,7 +116,7 @@ Memory = {
 ---Reads a value from memory. Location can be an sm64 decomp variable or a custom defined variable in Memory.addr
 ---@param location string The name of the variable to read from memory
 ---@param s? integer The size of a variable read from decomp. A value of "0" means to read a float
----@return integer|number
+---@return integer|number|table
 function Memory.read(location, s)
 	if Memory.addr[location] ~= nil then
 		if Memory.addr[location].size == 0 then
@@ -124,6 +140,12 @@ function Memory.read(location, s)
 			return memory.readsize(Memory.decomp.addr[location].addr, size)
 		end
 
+	elseif Memory.special[location] ~= nil then
+		local t = {}
+		for _, v in ipairs(Memory.special[location].parameters) do
+			table.insert(t, Memory.read(v))
+		end
+		return Memory.special[location].process(t)
 	else
 		print("Failed to find memory location " .. location)
 		return 0
@@ -160,6 +182,22 @@ function Memory.write(location, value, s)
 	else
 		print("Failed to find memory location " .. location)
 		return 0
+	end
+end
+
+---Returns the display name of the variable at location
+---@param location string The name of the variable
+---@return string display_name The display name of the variable
+function Memory.get_display_name(location)
+	if Memory.addr[location] ~= nil then
+		return Memory.addr[location].DisplayName
+	elseif Memory.decomp.addr[location] ~= nil then
+		return Memory.decomp.addr[location].name
+	elseif Memory.special[location] ~= nil then
+		return Memory.special[location].DisplayName
+	else
+		print("Failed to find memory location " .. location)
+		return ""
 	end
 end
 

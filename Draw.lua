@@ -131,10 +131,15 @@ Draw = {
 		offset = Round(m * 100)
 	},
 	slots = {
+		data = {
+			{ name = "", value = "" },
+			{ name = "", value = "" },
+			{ name = "", value = "" }
+		},
 		x = Screen.start + Round(m * 50), -- 1490
 		start_y = Round(m * 260),
 		y_offset = Round(m * 40),
-		x_offset = Round(m * 190),
+		x_offset = Round(m * 190), -- the distance between the name and the value
 		font_size = Round(m * 24),
 		font = "Calibri",
 		style = "a",
@@ -154,6 +159,11 @@ Draw = {
 function Draw.main()
 	-- Clear the screen
 	wgui.fillrecta(Screen.start, 0, Screen.extra_width, Screen.height, Draw.backgrounda)
+
+	-- Draw author
+	Draw.set_text("author")
+	wgui.drawtext("Author: " .. Draw.author.author,
+		{ l = Screen.init_width, t = Draw.author.y, w = Screen.extra_width, h = 100 }, "c")
 
 	-- Draw timer
 	wgui.setfont(Draw.timer.font_size, Draw.timer.font, Draw.timer.style)
@@ -217,27 +227,30 @@ function Draw.main()
 	Draw.cbutton("Cdown", { 0, 1 }, math.pi)
 	Draw.cbutton("Cleft", { -1, 0 }, math.pi / 2)
 
+	-- Draw variable slots and segment counter
+	Draw.set_text("slots")
+	wgui.drawtext("Segment", { l = Draw.slots.x, t = Draw.slots.start_y, w = Draw.slots.x_offset, h = Draw.slots.y_offset }
+		, "l")
+	wgui.drawtext(string.format("%d", Segments),
+		{ l = Draw.slots.x + Draw.slots.x_offset, t = Draw.slots.start_y,
+			w = Screen.extra_width - (Draw.slots.x - Screen.start) - Draw.slots.x_offset, h = Draw.slots.y_offset }, "l")
+	for i = 1, 3, 1 do
+		if Draw.slots.data[i].name ~= "" then
+			wgui.drawtext(Draw.slots.data[i].name,
+				{ l = Draw.slots.x, t = Draw.slots.start_y + (i * Draw.slots.y_offset), w = Draw.slots.x_offset,
+					h = Draw.slots.y_offset }, "l")
+			wgui.drawtext(Draw.slots.data[i].value,
+				{ l = Draw.slots.x + Draw.slots.x_offset, t = Draw.slots.start_y + (i * Draw.slots.y_offset),
+					w = Screen.extra_width - (Draw.slots.x - Screen.start) - Draw.slots.x_offset,
+					h = Draw.slots.y_offset }, "l")
+		end
+	end
 
 	-- Draw a press counter
 	Draw.set_text("apress")
 	wgui.drawtext("A Presses:", { l = Screen.init_width, t = Draw.apress.y, w = Screen.extra_width, h = 100 }, "c")
 	wgui.drawtext(string.format("%d", APresses),
 		{ l = Screen.init_width, t = Draw.apress.y + Draw.apress.offset, w = Screen.extra_width, h = 100 }, "c")
-
-
-	-- Draw variable slots and segment counter
-	Draw.set_text("slots")
-	wgui.drawtext("Segment", { l = Draw.slots.x, t = Draw.slots.start_y, w = Draw.slots.x_offset, h = 100 }, "l")
-	wgui.drawtext(string.format("%d", Segments),
-		{ l = Draw.slots.x + Draw.slots.x_offset, t = Draw.slots.start_y, w = 400, h = 100 }, "l")
-	for i = 1, 3, 1 do
-		if Slots[i].occupied then
-			Draw.slot(i)
-		end
-	end
-	Draw.set_text("author")
-	wgui.drawtext("Author: " .. Draw.author.author,
-		{ l = Screen.init_width, t = Draw.author.y, w = Screen.extra_width, h = 100 }, "c")
 end
 
 -- Shape drawing functions
@@ -366,36 +379,10 @@ function Draw.cbutton(joypad, offset_mult, angle)
 	end
 end
 
-function Draw.slot(slot)
-	if Slots[slot].var == "holp" then
-		wgui.drawtext("HOLP",
-			{ l = Draw.slots.x, t = Draw.slots.start_y + (slot * Draw.slots.y_offset), w = Draw.slots.x_offset, h = 100 }, "l")
-		wgui.drawtext(string.format("%.0f %.0f %.0f", Memory.read("holpx"), Memory.read("holpy"), Memory.read("holpz")),
-			{ l = Draw.slots.x + Draw.slots.x_offset, t = Draw.slots.start_y + (slot * Draw.slots.y_offset), w = 400, h = 100 },
-			"l")
-	elseif Slots[slot].var == "slidespeed" then
-		wgui.drawtext("Sliding Speed",
-			{ l = Draw.slots.x, t = Draw.slots.start_y + (slot * Draw.slots.y_offset), w = Draw.slots.x_offset, h = 100 }, "l")
-		wgui.drawtext(string.format("%.3f", math.sqrt(Memory.read("xslidespeed") ^ 2 + Memory.read("zslidespeed") ^ 2)),
-			{ l = Draw.slots.x + Draw.slots.x_offset, t = Draw.slots.start_y + (slot * Draw.slots.y_offset), w = 400, h = 100 },
-			"l")
-	else
-		wgui.drawtext(Memory.addr[Slots[slot].var].name,
-			{ l = Draw.slots.x, t = Draw.slots.start_y + (slot * Draw.slots.y_offset), w = Draw.slots.x_offset, h = 100 }, "l")
-		local style = nil
-		if Memory.addr[Slots[slot].var].float then
-			style = "%.3f"
-		else
-			style = "%d"
-		end
-		wgui.drawtext(string.format(style, Memory.read(Slots[slot].var)),
-			{ l = Draw.slots.x + Draw.slots.x_offset, t = Draw.slots.start_y + (slot * Draw.slots.y_offset), w = 400, h = 100 },
-			"l")
-	end
-end
-
 -- Drawing utilities
 
+---Sets the font and text color for a given object
+---@param object string The table in the Draw table that contains the font information
 function Draw.set_text(object)
 	wgui.setfont(Draw[object].font_size, Draw[object].font, Draw[object].style)
 	wgui.setcolor(Draw[object].text_color)
@@ -431,5 +418,5 @@ function Draw.calc_timer(vis) -- converts vi (60 fps) to h:m:s:ms
 	local min = (vis // 3600) - (h * 60)
 	local s = (vis // 60) - (min * 60) - (h * 3600)
 	local ms = Round((vis * 5 / 3) - (s * 100) - (min * 6000) - (h * 360000))
-	return string.format("%02d:%02d:%02d.%02d", h, m, s, ms)
+	return string.format("%02d:%02d:%02d.%02d", h, min, s, ms)
 end
