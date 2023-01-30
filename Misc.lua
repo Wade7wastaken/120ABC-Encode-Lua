@@ -41,3 +41,14 @@ function SerializeLinearTable(t, format)
 		return string.format(format, table.unpack(t))
 	end
 end
+
+---Splits a string into words at every whitespace character
+---@param s string The input string to split
+---@return table word_table A linear table of all the words in the input string
+function SplitString(s)
+	local t = {}
+	for str in string.gmatch(s, "([^%s]+)") do -- split the string into a table
+		table.insert(t, str)
+	end
+	return t
+end

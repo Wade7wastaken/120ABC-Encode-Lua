@@ -101,10 +101,10 @@ Memory = {
 			DisplayName = "H Slide Speed"
 		},
 		holp = {
-			process = function (t)
+			process = function(t)
 				return t
 			end,
-			parameters = {"holpx", "holpy", "holpz"},
+			parameters = { "holpx", "holpy", "holpz" },
 			DisplayName = "HOLP"
 		}
 	},
@@ -116,7 +116,7 @@ Memory = {
 ---Reads a value from memory. Location can be an sm64 decomp variable or a custom defined variable in Memory.addr
 ---@param location string The name of the variable to read from memory
 ---@param s? integer The size of a variable read from decomp. A value of "0" means to read a float
----@return integer|number|table
+---@return integer|number|string|table
 function Memory.read(location, s)
 	if Memory.addr[location] ~= nil then
 		if Memory.addr[location].size == 0 then
@@ -124,7 +124,7 @@ function Memory.read(location, s)
 		else
 			return memory.readsize(Memory.addr[location][Memory.version], Memory.addr[location].size)
 		end
-	elseif Memory.decomp.addr[location] ~= nil then
+		--[[elseif Memory.decomp.addr[location] ~= nil then
 		local size
 		if Memory.decomp.addr[location].size ~= nil then size = Memory.decomp.addr[location].size end
 		if s ~= nil then size = s end -- prioritize this
@@ -138,7 +138,7 @@ function Memory.read(location, s)
 			return memory.readfloat(Memory.decomp.addr[location].addr)
 		else
 			return memory.readsize(Memory.decomp.addr[location].addr, size)
-		end
+		end]]
 
 	elseif Memory.special[location] ~= nil then
 		local t = {}
@@ -147,9 +147,36 @@ function Memory.read(location, s)
 		end
 		return Memory.special[location].process(t)
 	else
-		print("Failed to find memory location " .. location)
-		return 0
+		local path = string.format("\"%sPython\\WafelRead\\dist\\WafelRead.exe\" %d %d %s %s", PATH, System.pid,
+			System.ramstart, Memory.version:lower(), location)
+
+		local handle = io.popen(path)
+		if handle ~= nil then
+			local result = handle:read("a")
+			handle:close()
+
+			local words = SplitString(result)
+
+			if words[1] == "Ok" then
+				local cast = tonumber(words[2])
+				if cast ~= nil then
+					return cast
+				else
+					print("Error casting")
+				end
+			elseif words[1] == "Error" then
+				print("Error reading from " .. location .. ". Error: " .. words[2] .. " " .. table.concat(words, " ", 3, #words))
+			else
+				print("Unknown result, reading " .. location .. ": " .. result)
+				return 0
+			end
+
+		else
+			print("Failed to run command " .. path .. ". Resulting handle was nil.")
+			return 0
+		end
 	end
+	return 0
 end
 
 ---Writes a value to memory. Location can be an sm64 decomp variable or a custom defined variable in Memory.addr
@@ -281,5 +308,5 @@ end
 ---Initializes the Memory module
 function Memory.init()
 	Memory.version = Memory.determineVersion()
-	Memory.loadDecompAddrs("US")
+	Memory.loadDecompAddrs(Memory.version)
 end

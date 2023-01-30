@@ -13,6 +13,7 @@
 -- SETTINGS
 DRAWING = true
 SET_VALUES = true
+DEBUG = true
 
 
 -- CHANGES
@@ -20,10 +21,12 @@ SlotChanges = {}
 -- Can't do anything before frame 157, each frame is a table of changes
 -- each change sets the variable of the corresponding slot. Setting a slot to an empty string disables it
 
-SlotChanges[2182] = { { 1, "hspeed", "%.3f" }, { 2, "holp", "%.0f %.0f %.0f" } }
-SlotChanges[94161] = { { 1, "" }, { 2, "" } }
-SlotChanges[109621] = { { 1, "hspeed" }, { 2, "slidespeed" } }
+SlotChanges[2182] = { { 1, "hspeed", "%.3f" }, { 2, "hslidespeed", "%.3f" }, { 3, "holp", "%.0f %.0f %.0f" } }
+SlotChanges[94161] = { { 1, "" }, { 2, "" }, { 3, "" } }
+SlotChanges[109621] = { { 1, "hspeed", "%.3f" }, { 2, "hslidespeed", "%.3f" } }
 SlotChanges[111994] = { { 1, "" }, { 2, "" } }
+SlotChanges[112306] = { { 1, "hspeed", "%.3f" }, { 2, "hslidespeed", "%.3f" } }
+SlotChanges[113200] = { { 1, "" }, { 2, "" } }
 
 RNGChanges = {} -- sets the rng to the value
 
@@ -115,11 +118,10 @@ end
 function AtInput()
 	Frame = emu.samplecount() + 1 -- ¯\_(ツ)_/¯
 	Joypad = joypad.get(1) -- get the joypad input from the first controller
-	JoypadDiff = input.diff(Joypad, PreviousJoypad)
 	if Memory.read('action') == 6409 then -- end cutscene action
 		Draw.timer.active = false -- stop the timer when the grand star is collected
 	end
-	if JoypadDiff.A then -- a press counter logic
+	if Joypad.A and not PreviousJoypad.A then -- a press counter logic (cant use input.diff for some reason)
 		APresses = APresses + 1
 	end
 
@@ -173,6 +175,7 @@ function AtInput()
 				Draw.slots.data[v2[1]].name = Memory.get_display_name(v2[2])
 
 				local mem = Memory.read(v2[2])
+
 				local fmt = v2[3]
 
 				local p = (type(mem) == "table") -- did Memory return a table?
@@ -189,10 +192,14 @@ function AtInput()
 					output = tostring(mem)
 				end
 				Draw.slots.data[v2[1]].value = output
+			else
+				Draw.slots.data[v2[1]].name = ""
+				Draw.slots.data[v2[1]].value = ""
 			end
 		end
 	end
 
+	Memory.read("gRandomSeed16")
 	PreviousJoypad = Joypad
 end
 
@@ -203,7 +210,13 @@ function AtStop()
 	end
 end
 
+function AtReset()
+	print("Reset")
+	Screen.expand()
+end
+
 PATH = debug.getinfo(1).source:sub(2):match("(.*\\)") -- From InputDirection
+dofile(PATH .. "System.lua")
 dofile(PATH .. "Misc.lua")
 dofile(PATH .. "Screen.lua")
 Screen.init() -- must be run before Draw
@@ -214,11 +227,19 @@ dofile(PATH .. "Image.lua")
 
 Memory.init()
 
-Map.map1.state = 2
-Map.map1.h = 300
-Map.map1.x = 100
-Map.map1.y = 100
-Map.map1.data = { zoom = 1, x = 750, y = 750, name = "Castle Grounds", mario = true }
+--[[print(PATH .. "Python/WafelRead/dist/WafelRead.exe")
+
+if DEBUG then
+	local handle = io.popen("\"" ..
+		PATH .. "Python\\WafelRead\\dist\\WafelRead.exe\" " .. emu.getprocessid() .. " " .. emu.getramstart() .. " " .. "jp gMarioState")
+	if handle ~= nil then
+		local result = handle:read("a")
+		handle:close()
+		print(result)
+	else
+		print("error")
+	end
+end]]
 
 VI = 0
 Frame = 0
@@ -228,7 +249,6 @@ PreviousInput = input.get() -- initialized here so there's no nil error later
 InputDiff = {} -- the difference in inputs between the previous and current frames
 Joypad = joypad.get(1)
 PreviousJoypad = { A = false }
-JoypadDiff = {}
 
 if DRAWING then
 	Screen.expand()
@@ -238,3 +258,4 @@ emu.atinterval(AtInterval) -- ran continuously
 emu.atvi(AtVI) -- ran every visual interrupt (DRAWING happens here)
 emu.atinput(AtInput) -- ran every input frame
 emu.atstop(AtStop) -- ran when the script is stopped
+emu.atreset(AtReset)
