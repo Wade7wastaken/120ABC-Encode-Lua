@@ -9,7 +9,6 @@
 	Every function should have annotations giving the types of its parameters and returns
 	A function's description should be put above the annotations
 ]]
-
 -- SETTINGS
 DRAWING = true
 SET_VALUES = true
@@ -21,12 +20,12 @@ SlotChanges = {}
 -- Can't do anything before frame 157, each frame is a table of changes
 -- each change sets the variable of the corresponding slot. Setting a slot to an empty string disables it
 
-SlotChanges[2182] = { { 1, "hspeed", "%.3f" }, { 2, "hslidespeed", "%.3f" }, { 3, "holp", "%.0f %.0f %.0f" } }
-SlotChanges[94161] = { { 1, "" }, { 2, "" }, { 3, "" } }
-SlotChanges[109621] = { { 1, "hspeed", "%.3f" }, { 2, "hslidespeed", "%.3f" } }
-SlotChanges[111994] = { { 1, "" }, { 2, "" } }
-SlotChanges[112306] = { { 1, "hspeed", "%.3f" }, { 2, "hslidespeed", "%.3f" } }
-SlotChanges[113200] = { { 1, "" }, { 2, "" } }
+SlotChanges[2182] = { { 1, "hspeed", "%.3f", }, { 2, "hslidespeed", "%.3f", }, { 3, "holp", "%.0f %.0f %.0f", }, }
+SlotChanges[94161] = { { 1, "", }, { 2, "", }, { 3, "", }, }
+SlotChanges[109621] = { { 1, "hspeed", "%.3f", }, { 2, "hslidespeed", "%.3f", }, }
+SlotChanges[111994] = { { 1, "", }, { 2, "", }, }
+SlotChanges[112306] = { { 1, "hspeed", "%.3f", }, { 2, "hslidespeed", "%.3f", }, }
+SlotChanges[113200] = { { 1, "", }, { 2, "", }, }
 
 RNGChanges = {} -- sets the rng to the value
 
@@ -70,7 +69,7 @@ end
 table.sort(SlotIndices)
 
 function FillSlots(frame, t, idxt)
-	Draw.slots.data = { { name = "", value = "" }, { name = "", value = "" }, { name = "", value = "" } } -- clear the slots
+	Draw.slots.data = { { name = "", value = "", }, { name = "", value = "", }, { name = "", value = "", }, } -- clear the slots
 	for i, v in ipairs(idxt) do
 		if frame < v then return end
 		local change = SlotChanges[v]
@@ -167,7 +166,7 @@ function AtInput()
 	end
 	if Draw.author.author == nil then Draw.author.author = Author[AuthorIndices[#AuthorIndices]] end -- return the last author change if the loop finishes
 
-	Draw.slots.data = { { name = "", value = "" }, { name = "", value = "" }, { name = "", value = "" } } -- clear the slots
+	Draw.slots.data = { { name = "", value = "", }, { name = "", value = "", }, { name = "", value = "", }, } -- clear the slots
 	for _, v in ipairs(SlotIndices) do
 		if Frame < v then break end
 		for _, v2 in ipairs(SlotChanges[v]) do
@@ -183,8 +182,10 @@ function AtInput()
 				local output = ""
 
 				if p and q then
+					assert(type(mem) == "table")
 					output = SerializeLinearTable(mem, fmt)
 				elseif p and not q then
+					assert(type(mem) == "table")
 					output = SerializeLinearTable(mem)
 				elseif not p and q then
 					output = string.format(fmt, mem)
@@ -240,7 +241,6 @@ if DEBUG then
 		print("error")
 	end
 end]]
-
 VI = 0
 Frame = 0
 APresses = 0
@@ -248,7 +248,7 @@ Segments = 1
 PreviousInput = input.get() -- initialized here so there's no nil error later
 InputDiff = {} -- the difference in inputs between the previous and current frames
 Joypad = joypad.get(1)
-PreviousJoypad = { A = false }
+PreviousJoypad = { A = false, }
 
 if DRAWING then
 	Screen.expand()

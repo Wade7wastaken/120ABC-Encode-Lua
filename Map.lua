@@ -3,7 +3,6 @@ Images:
 Map Background (1)
 Map Icons (idk yet)
 ]]
-
 --[[
 States:
 0: inactive
@@ -13,7 +12,6 @@ States:
 4: relative camera (visible PUs)
 5: PU map
 ]]
-
 local imagesize = 1500 -- the size of the map images
 local iconscale = 0.25
 
@@ -24,15 +22,15 @@ local template = {
 	y = 0,
 	w = 500,
 	h = 500,
-	border = { size = 5, color = "#FFFFFFFF" },
-	background = "#000000FF"
+	border = { size = 5, color = "#FFFFFFFF", },
+	background = "#000000FF",
 }
 
 Map = {
 	map1 = {},
 	map2 = {},
 	map3 = {},
-	map4 = {}
+	map4 = {},
 }
 
 function Map.init()
@@ -86,17 +84,18 @@ function Map.draw()
 				wgui.drawimage(Image.get(fname),
 					Round((
 						((((imagesize / (2 * data.data.zoom)) - data.data.x) / v) + data.x) +
-							((375 * (Memory.read("mariox") + 8191)) / (4096 * v))) - (Image.getinfo(fname).width * iconscale / 2)),
+						((375 * (Memory.read("mariox") + 8191)) / (4096 * v))) -
+						(Image.getinfo(fname).width * iconscale / 2)),
 					Round((
 						((((imagesize / (2 * ar * data.data.zoom)) - data.data.y) / v) + data.y) +
-							((375 * (Memory.read("marioz") + 8191)) / (4096 * v))) - (Image.getinfo(fname).height * iconscale / 2)),
+						((375 * (Memory.read("marioz") + 8191)) / (4096 * v))) -
+						(Image.getinfo(fname).height * iconscale / 2)),
 					iconscale)
 			end
 		end
 
 		::continue::
 	end
-
 end
 
 function Map.deactivate(idx)

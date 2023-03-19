@@ -8,13 +8,13 @@ function Screen.init()
 	Screen.width = 4 / 3 * Screen.init_width -- chose this factor because it gets 1440x1080 to 1920x1080
 
 	if Screen.width ~= math.floor(Screen.width) then
-
 		print("Current resolution cannot scale to 16:9.")
 		print("Using " .. Round(Screen.width) .. " instead of " .. Screen.width)
 		Screen.width = Round(Screen.width)
 	end
 
-	Screen.height = Screen.init_height - 24 -- This number will vary between computers, it is the size of the bottom toolbar of the mupen window, if you can't figure out what this number is for your system, ask me for help
+	-- This number will vary between computers, it is the size of the bottom toolbar of the mupen window, if you can't figure out what this number is for your system, ask me for help
+	Screen.height = Screen.init_height - 24
 	Screen.extra_width = Screen.width - Screen.init_width
 	Screen.start = Screen.init_width
 	Screen.middle = Screen.init_width + (Screen.extra_width / 2)

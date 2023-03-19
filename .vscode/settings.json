@@ -4,6 +4,17 @@
 	"cSpell.diagnosticLevel": "Hint",
 	"workbench.colorCustomizations": {
 		// changees the color of three dots to red
-		"editorHint.foreground": "#ff5a5aa0",
+		"editorHint.foreground": "#ff5a5aa0"
+	},
+	"Lua.format.defaultConfig": {
+		"indent_style": "tab",
+		"tab_width": "4",
+		"max_line_length": "120",
+		"trailing_table_separator": "always",
+		"insert_final_newline": "true",
+		"align_continuous_inline_comment": "false"
+	},
+	"Lua.diagnostics.neededFileStatus": {
+		"codestyle-check": "Any"
 	}
 }

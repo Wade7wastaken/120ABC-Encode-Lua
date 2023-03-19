@@ -10,7 +10,7 @@ Draw = {
 		font = "Calibri",
 		style = "a",
 		color = "#FFFFFF",
-		stopped_color = "#AAFFAA"
+		stopped_color = "#AAFFAA",
 	},
 	cstick = {
 		x = Screen.start + Round(m * 240), -- 1680
@@ -18,22 +18,22 @@ Draw = {
 		size = Round(m * 150),
 		circle = {
 			thickness = Round(m * 2),
-			color = "#AAAAAA"
+			color = "#AAAAAA",
 		},
 		axis = {
-			color = "#AAAAAA"
+			color = "#AAAAAA",
 		},
 		border = {
 			thickness = Round(m * 3),
-			color = "#FFFFFFFF"
+			color = "#FFFFFFFF",
 		},
 		stick = {
 			thickness = Round(m * 3),
-			color = "#FFAAAAFF"
+			color = "#FFAAAAFF",
 		},
 		ball = {
 			radius = Round(m * 5),
-			color = "#3333FFFF"
+			color = "#3333FFFF",
 		},
 		display = {
 			x_offset = Round(m * 85),
@@ -43,12 +43,12 @@ Draw = {
 			font = "Courier New",
 			style = "ba",
 			text_color = "#FF3333",
-		}
+		},
 	},
 	buttons = {
 		border = "#FFFFFFFF",
 		text_color = "#FFFFFF",
-		thickness = Round(m * 4)
+		thickness = Round(m * 4),
 	},
 	a = {
 		x = Screen.start + Round(m * 310), -- 1750
@@ -59,7 +59,7 @@ Draw = {
 		font = "Calibri",
 		style = "a",
 		x_offset = Round(m * -11),
-		y_offset = Round(m * -27)
+		y_offset = Round(m * -27),
 	},
 	b = {
 		x = Screen.start + Round(m * 240), -- 1680
@@ -70,7 +70,7 @@ Draw = {
 		font = "Calibri",
 		style = "a",
 		x_offset = Round(m * -11),
-		y_offset = Round(m * -27)
+		y_offset = Round(m * -27),
 	},
 	s = {
 		x = Screen.start + Round(m * 275), -- 1715
@@ -81,7 +81,7 @@ Draw = {
 		font = "Calibri",
 		style = "a",
 		x_offset = Round(m * -9),
-		y_offset = Round(m * -27)
+		y_offset = Round(m * -27),
 	},
 	z = {
 		x = Screen.start + Round(m * 160), -- 1600
@@ -93,7 +93,7 @@ Draw = {
 		font = "Calibri",
 		style = "a",
 		x_offset = Round(m * -11),
-		y_offset = Round(m * -27)
+		y_offset = Round(m * -27),
 	},
 	cbuttons = {
 		x = Screen.start + Round(m * 180), -- 1620
@@ -105,9 +105,9 @@ Draw = {
 		font_size = Round(m * 32),
 		font = "Calibri",
 		style = "a",
-		text_offset = { Round(m * -12), Round(m * -26) },
+		text_offset = { Round(m * -12), Round(m * -26), },
 		triangle_thickness = Round(m * 5),
-		triangle_size = Round(m * 12)
+		triangle_size = Round(m * 12),
 	},
 	r = {
 		x = Screen.start + Round(m * 310), -- 1750
@@ -119,7 +119,7 @@ Draw = {
 		font = "Calibri",
 		style = "a",
 		x_offset = Round(m * -11),
-		y_offset = Round(m * -27)
+		y_offset = Round(m * -27),
 	},
 	apress = {
 		y = Round(m * 50),
@@ -128,13 +128,13 @@ Draw = {
 		style = "a",
 		text_color = "#FFFFFF",
 		height = Round(m * 100),
-		offset = Round(m * 100)
+		offset = Round(m * 100),
 	},
 	slots = {
 		data = {
-			{ name = "", value = "" },
-			{ name = "", value = "" },
-			{ name = "", value = "" }
+			{ name = "", value = "", },
+			{ name = "", value = "", },
+			{ name = "", value = "", },
 		},
 		x = Screen.start + Round(m * 50), -- 1490
 		start_y = Round(m * 260),
@@ -151,8 +151,8 @@ Draw = {
 		font_size = Round(m * 24),
 		font = "Calibri",
 		style = "a",
-		text_color = "#FFFFFF"
-	}
+		text_color = "#FFFFFF",
+	},
 }
 
 ---The main drawing function
@@ -163,7 +163,7 @@ function Draw.main()
 	-- Draw author
 	Draw.set_text("author")
 	wgui.drawtext("Author: " .. Draw.author.author,
-		{ l = Screen.init_width, t = Draw.author.y, w = Screen.extra_width, h = 100 }, "c")
+		{ l = Screen.init_width, t = Draw.author.y, w = Screen.extra_width, h = 100, }, "c")
 
 	-- Draw timer
 	wgui.setfont(Draw.timer.font_size, Draw.timer.font, Draw.timer.style)
@@ -173,7 +173,8 @@ function Draw.main()
 	else
 		wgui.setcolor(Draw.timer.stopped_color)
 	end
-	wgui.drawtext(Draw.calc_timer(Draw.time), { l = Screen.init_width, t = Draw.timer.y, w = Screen.extra_width, h = 200 },
+	wgui.drawtext(Draw.calc_timer(Draw.time),
+		{ l = Screen.init_width, t = Draw.timer.y, w = Screen.extra_width, h = 200, },
 		"c")
 
 
@@ -183,11 +184,14 @@ function Draw.main()
 
 	-- Draw axes
 	wgui.setpen(Draw.cstick.axis.color)
-	wgui.line(Draw.cstick.x - (Draw.cstick.size / 2), Draw.cstick.y, Draw.cstick.x + (Draw.cstick.size / 2), Draw.cstick.y)
-	wgui.line(Draw.cstick.x, Draw.cstick.y - (Draw.cstick.size / 2), Draw.cstick.x, Draw.cstick.y + (Draw.cstick.size / 2))
+	wgui.line(Draw.cstick.x - (Draw.cstick.size / 2), Draw.cstick.y, Draw.cstick.x + (Draw.cstick.size / 2),
+	Draw.cstick.y)
+	wgui.line(Draw.cstick.x, Draw.cstick.y - (Draw.cstick.size / 2), Draw.cstick.x,
+	Draw.cstick.y + (Draw.cstick.size / 2))
 
 	-- Draw border
-	Draw.border_transparent(Draw.cstick.x, Draw.cstick.y, Draw.cstick.size, Draw.cstick.size, Draw.cstick.border.thickness,
+	Draw.border_transparent(Draw.cstick.x, Draw.cstick.y, Draw.cstick.size, Draw.cstick.size,
+		Draw.cstick.border.thickness,
 		Draw.cstick.border.color)
 
 	-- Draw stick
@@ -202,11 +206,16 @@ function Draw.main()
 	wgui.setfont(Draw.cstick.display.font_size, Draw.cstick.display.font, Draw.cstick.display.style)
 	wgui.setcolor(Draw.cstick.display.text_color)
 	wgui.drawtext(string.format("X: %d", Joypad.X),
-		{ l = Draw.cstick.x + Draw.cstick.display.x_offset, t = Draw.cstick.y + Draw.cstick.display.y_offset, w = 200, h = 30 }
+		{ l = Draw.cstick.x + Draw.cstick.display.x_offset, t = Draw.cstick.y + Draw.cstick.display.y_offset, w = 200,
+			h = 30, }
 		, "l")
 	wgui.drawtext(string.format("Y: %d", Joypad.Y),
-		{ l = Draw.cstick.x + Draw.cstick.display.x_offset,
-			t = Draw.cstick.y + Draw.cstick.display.y_offset + Draw.cstick.display.distance, w = 200, h = 30 }, "l")
+		{
+			l = Draw.cstick.x + Draw.cstick.display.x_offset,
+			t = Draw.cstick.y + Draw.cstick.display.y_offset + Draw.cstick.display.distance,
+			w = 200,
+			h = 30,
+		}, "l")
 
 
 	-- Draw buttons
@@ -220,37 +229,53 @@ function Draw.main()
 	-- Draw c buttons
 	Draw.set_text("cbuttons")
 	wgui.drawtext("C",
-		{ l = Draw.cbuttons.x + Draw.cbuttons.text_offset[1], t = Draw.cbuttons.y + Draw.cbuttons.text_offset[2], w = 200,
-			h = 100 }, "l")
-	Draw.cbutton("Cup", { 0, -1 }, 0) -- joypad name, table with multipliers for the x and y offsets, angle
-	Draw.cbutton("Cright", { 1, 0 }, -math.pi / 2) -- table example: {0, 0} means no offset, {1, 0} means x offset, {0, -1} means negative y offset
-	Draw.cbutton("Cdown", { 0, 1 }, math.pi)
-	Draw.cbutton("Cleft", { -1, 0 }, math.pi / 2)
+		{
+			l = Draw.cbuttons.x + Draw.cbuttons.text_offset[1],
+			t = Draw.cbuttons.y + Draw.cbuttons.text_offset[2],
+			w = 200,
+			h = 100,
+		}, "l")
+	Draw.cbutton("Cup", { 0, -1, }, 0) -- joypad name, table with multipliers for the x and y offsets, angle
+	Draw.cbutton("Cright", { 1, 0, }, -math.pi / 2) -- table example: {0, 0} means no offset, {1, 0} means x offset, {0, -1} means negative y offset
+	Draw.cbutton("Cdown", { 0, 1, }, math.pi)
+	Draw.cbutton("Cleft", { -1, 0, }, math.pi / 2)
 
 	-- Draw variable slots and segment counter
 	Draw.set_text("slots")
-	wgui.drawtext("Segment", { l = Draw.slots.x, t = Draw.slots.start_y, w = Draw.slots.x_offset, h = Draw.slots.y_offset }
-		, "l")
+	wgui.drawtext("Segment",
+	{ l = Draw.slots.x, t = Draw.slots.start_y, w = Draw.slots.x_offset, h = Draw.slots.y_offset, }
+	, "l")
 	wgui.drawtext(string.format("%d", Segments),
-		{ l = Draw.slots.x + Draw.slots.x_offset, t = Draw.slots.start_y,
-			w = Screen.extra_width - (Draw.slots.x - Screen.start) - Draw.slots.x_offset, h = Draw.slots.y_offset }, "l")
+		{
+			l = Draw.slots.x + Draw.slots.x_offset,
+			t = Draw.slots.start_y,
+			w = Screen.extra_width - (Draw.slots.x - Screen.start) - Draw.slots.x_offset,
+			h = Draw.slots.y_offset,
+		}, "l")
 	for i = 1, 3, 1 do
 		if Draw.slots.data[i].name ~= "" then
 			wgui.drawtext(Draw.slots.data[i].name,
-				{ l = Draw.slots.x, t = Draw.slots.start_y + (i * Draw.slots.y_offset), w = Draw.slots.x_offset,
-					h = Draw.slots.y_offset }, "l")
+				{
+					l = Draw.slots.x,
+					t = Draw.slots.start_y + (i * Draw.slots.y_offset),
+					w = Draw.slots.x_offset,
+					h = Draw.slots.y_offset,
+				}, "l")
 			wgui.drawtext(Draw.slots.data[i].value,
-				{ l = Draw.slots.x + Draw.slots.x_offset, t = Draw.slots.start_y + (i * Draw.slots.y_offset),
+				{
+					l = Draw.slots.x + Draw.slots.x_offset,
+					t = Draw.slots.start_y + (i * Draw.slots.y_offset),
 					w = Screen.extra_width - (Draw.slots.x - Screen.start) - Draw.slots.x_offset,
-					h = Draw.slots.y_offset }, "l")
+					h = Draw.slots.y_offset,
+				}, "l")
 		end
 	end
 
 	-- Draw a press counter
 	Draw.set_text("apress")
-	wgui.drawtext("A Presses:", { l = Screen.init_width, t = Draw.apress.y, w = Screen.extra_width, h = 100 }, "c")
+	wgui.drawtext("A Presses:", { l = Screen.init_width, t = Draw.apress.y, w = Screen.extra_width, h = 100, }, "c")
 	wgui.drawtext(string.format("%d", APresses),
-		{ l = Screen.init_width, t = Draw.apress.y + Draw.apress.offset, w = Screen.extra_width, h = 100 }, "c")
+		{ l = Screen.init_width, t = Draw.apress.y + Draw.apress.offset, w = Screen.extra_width, h = 100, }, "c")
 end
 
 -- Shape drawing functions
@@ -279,7 +304,8 @@ end
 ---@param border_color string The color of the border
 function Draw.border(x, y, w, h, thickness, inner_color, border_color)
 	wgui.fillrecta(x - (w / 2), y - (h / 2), w, h, border_color)
-	wgui.fillrecta(x - (w / 2) + thickness, y - (h / 2) + thickness, w - (thickness * 2), h - (thickness * 2), inner_color)
+	wgui.fillrecta(x - (w / 2) + thickness, y - (h / 2) + thickness, w - (thickness * 2), h - (thickness * 2),
+	inner_color)
 end
 
 ---Draws a border around a circle in 2 draws. This function will overwrite the middle of the circle
@@ -314,24 +340,24 @@ end
 function Draw.triangle(x, y, length, angle, thickness, inner_color, border_color) -- draws a triangle with a border
 	wgui.fillpolygona({ {
 		Round(x + (math.cos((math.pi / 2) + angle) * length)),
-		Round(y - (math.sin((math.pi / 2) + angle) * length))
+		Round(y - (math.sin((math.pi / 2) + angle) * length)),
 	}, {
 		Round(x + (math.cos((7 / 6 * math.pi) + angle) * length)),
-		Round(y - (math.sin((7 / 6 * math.pi) + angle) * length))
+		Round(y - (math.sin((7 / 6 * math.pi) + angle) * length)),
 	}, {
 		Round(x + (math.cos((11 / 6 * math.pi) + angle) * length)),
-		Round(y - (math.sin((11 / 6 * math.pi) + angle) * length))
-	} }, border_color)
+		Round(y - (math.sin((11 / 6 * math.pi) + angle) * length)),
+	}, }, border_color)
 	wgui.fillpolygona({ {
 		Round(x + (math.cos((math.pi / 2) + angle) * (length - thickness))),
-		Round(y - (math.sin((math.pi / 2) + angle) * (length - thickness)))
+		Round(y - (math.sin((math.pi / 2) + angle) * (length - thickness))),
 	}, {
 		Round(x + (math.cos((7 / 6 * math.pi) + angle) * (length - thickness))),
-		Round(y - (math.sin((7 / 6 * math.pi) + angle) * (length - thickness)))
+		Round(y - (math.sin((7 / 6 * math.pi) + angle) * (length - thickness))),
 	}, {
 		Round(x + (math.cos((11 / 6 * math.pi) + angle) * (length - thickness))),
-		Round(y - (math.sin((11 / 6 * math.pi) + angle) * (length - thickness)))
-	} }, inner_color)
+		Round(y - (math.sin((11 / 6 * math.pi) + angle) * (length - thickness))),
+	}, }, inner_color)
 end
 
 -- Complex drawing functions
@@ -339,10 +365,12 @@ end
 function Draw.button(button, button_name, text, ty) -- Draws a button and text
 	if ty == 0 then -- circle
 		if Joypad[button_name] then
-			Draw.circle_border(Draw[button].x, Draw[button].y, Draw[button].radius, Draw.buttons.thickness, Draw[button].color,
+			Draw.circle_border(Draw[button].x, Draw[button].y, Draw[button].radius, Draw.buttons.thickness,
+				Draw[button].color,
 				Draw.buttons.border)
 		else
-			Draw.circle_border(Draw[button].x, Draw[button].y, Draw[button].radius, Draw.buttons.thickness, Draw.backgrounda,
+			Draw.circle_border(Draw[button].x, Draw[button].y, Draw[button].radius, Draw.buttons.thickness,
+				Draw.backgrounda,
 				Draw.buttons.border)
 		end
 	end
@@ -351,14 +379,16 @@ function Draw.button(button, button_name, text, ty) -- Draws a button and text
 			Draw.border(Draw[button].x, Draw[button].y, Draw[button].w, Draw[button].h, Draw.buttons.thickness,
 				Draw[button].color, Draw.buttons.border)
 		else
-			Draw.border(Draw[button].x, Draw[button].y, Draw[button].w, Draw[button].h, Draw.buttons.thickness, Draw.backgrounda
-				, Draw.buttons.border)
+			Draw.border(Draw[button].x, Draw[button].y, Draw[button].w, Draw[button].h, Draw.buttons.thickness,
+			Draw.backgrounda
+			, Draw.buttons.border)
 		end
 	end
 	wgui.setfont(Draw[button].font_size, Draw[button].font, Draw[button].style)
 	wgui.setcolor(Draw.buttons.text_color)
 	wgui.drawtext(text,
-		{ l = Draw[button].x + Draw[button].x_offset, t = Draw[button].y + Draw[button].y_offset, w = 200, h = 100 }, "l")
+		{ l = Draw[button].x + Draw[button].x_offset, t = Draw[button].y + Draw[button].y_offset, w = 200, h = 100, },
+		"l")
 end
 
 function Draw.cbutton(joypad, offset_mult, angle)
@@ -397,20 +427,20 @@ function Draw.calc_stick_points() -- calculates the points for the "stick" polyg
 	local anglem = math.atan(jy, jx) - (math.pi / 2)
 	return { {
 		Round(Draw.cstick.x + (math.cos(anglep) * Draw.cstick.stick.thickness)),
-		Round(Draw.cstick.y - (math.sin(anglep) * Draw.cstick.stick.thickness))
+		Round(Draw.cstick.y - (math.sin(anglep) * Draw.cstick.stick.thickness)),
 	},
 		{
 			Round(Draw.cstick.x + (math.cos(anglep) * Draw.cstick.stick.thickness) + jx),
-			Round(Draw.cstick.y - (math.sin(anglep) * Draw.cstick.stick.thickness) - jy)
+			Round(Draw.cstick.y - (math.sin(anglep) * Draw.cstick.stick.thickness) - jy),
 		},
 		{
 			Round(Draw.cstick.x + (math.cos(anglem) * Draw.cstick.stick.thickness) + jx),
-			Round(Draw.cstick.y - (math.sin(anglem) * Draw.cstick.stick.thickness) - jy)
+			Round(Draw.cstick.y - (math.sin(anglem) * Draw.cstick.stick.thickness) - jy),
 		},
 		{
 			Round(Draw.cstick.x + (math.cos(anglem) * Draw.cstick.stick.thickness)),
-			Round(Draw.cstick.y - (math.sin(anglem) * Draw.cstick.stick.thickness))
-		} }
+			Round(Draw.cstick.y - (math.sin(anglem) * Draw.cstick.stick.thickness)),
+		}, }
 end
 
 function Draw.calc_timer(vis) -- converts vi (60 fps) to h:m:s:ms

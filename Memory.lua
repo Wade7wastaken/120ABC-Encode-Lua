@@ -1,117 +1,119 @@
 Memory = {
 	---@type "JP"|"US"
 	version = "US", -- default to US
-	decomp = { -- addresses from decomp map file
+	decomp = {
+	-- addresses from decomp map file
 		MapLocationUS = "Mappings/MappingUS.map",
 		MapLocationJP = "Mappings/MappingJP.map",
-		addr = {}
+		addr = {},
 	},
 	addr = {
 		mariox = {
 			JP = 0x80339E3C,
 			US = 0x8033B1AC,
 			size = 0,
-			DisplayName = "X"
+			DisplayName = "X",
 		},
 		marioy = {
 			JP = 0x80339E40,
 			US = 0x8033B1B0,
 			size = 0,
-			DisplayName = "Y"
+			DisplayName = "Y",
 		},
 		marioz = {
 			JP = 0x80339E44,
 			US = 0x8033B1B4,
 			size = 0,
-			DisplayName = "Z"
+			DisplayName = "Z",
 		},
 		action = {
 			US = 0x8033B17C,
 			JP = 0x80339E0C,
 			size = 4,
-			DisplayName = "Action"
+			DisplayName = "Action",
 		},
 		hspeed = {
 			US = 0x8033B1C4,
 			JP = 0x80339E54,
 			size = 0,
-			DisplayName = "H Speed"
+			DisplayName = "H Speed",
 		},
 		xslidespeed = {
 			US = 0x8033B1C8,
 			JP = 0x80339E58,
 			size = 0,
-			DisplayName = "X Slide Speed"
+			DisplayName = "X Slide Speed",
 		},
 		zslidespeed = {
 			US = 0x8033B1CC,
 			JP = 0x80339E5C,
 			size = 0,
-			DisplayName = "Z Slide Speed"
+			DisplayName = "Z Slide Speed",
 		},
 		rng = {
 			US = 0x8038EEE0,
 			JP = 0x8038EEE0,
 			size = 2,
-			DisplayName = "RNG"
+			DisplayName = "RNG",
 		},
 		globaltimer = {
 			US = 0x8032D5D4,
 			JP = 0x8032C694,
 			size = 4,
-			DisplayName = "RNG"
+			DisplayName = "RNG",
 		},
 		holpx = {
 			US = 0x8033B3C8,
 			JP = 0x8033A058,
 			size = 0,
-			DisplayName = "HOLP X"
+			DisplayName = "HOLP X",
 		},
 		holpy = {
 			US = 0x8033B3CC,
 			JP = 0x8033A05C,
 			size = 0,
-			DisplayName = "HOLP Y"
+			DisplayName = "HOLP Y",
 		},
 		holpz = {
 			US = 0x8033B3D0,
 			JP = 0x8033A060,
 			size = 0,
-			DisplayName = "HOLP Z"
+			DisplayName = "HOLP Z",
 		},
 		angleface = {
 			US = 0x8033B19E,
 			JP = 0x80339E2E,
 			size = 2,
-			DisplayName = "Angle"
+			DisplayName = "Angle",
 		},
 		objpool = {
 			US = 0x8033D488,
 			JP = 0x8033C118,
 			size = 4,
-			DisplayName = "Object Pool Start Node"
-		}
+			DisplayName = "Object Pool Start Node",
+		},
 	},
-	special = { -- special memory functions
+	special = {
+	-- special memory functions
 		hslidespeed = {
 			process = function(t)
 				return math.sqrt((t[1] ^ 2) + (t[2] ^ 2))
 			end,
-			parameters = { "xslidespeed", "zslidespeed" },
-			DisplayName = "H Slide Speed"
+			parameters = { "xslidespeed", "zslidespeed", },
+			DisplayName = "H Slide Speed",
 		},
 		holp = {
 			process = function(t)
 				return t
 			end,
-			parameters = { "holpx", "holpy", "holpz" },
-			DisplayName = "HOLP"
-		}
+			parameters = { "holpx", "holpy", "holpz", },
+			DisplayName = "HOLP",
+		},
 	},
 	objmap = {
-		next_obj = { addr = 0x08, size = 4 }, -- {offset, size (0 is float)}
-		X = { addr = 0xA0, size = 0 }
-	}
+		next_obj = { addr = 0x08, size = 4, }, -- {offset, size (0 is float)}
+		X = { addr = 0xA0, size = 0, },
+	},
 }
 ---Reads a value from memory. Location can be an sm64 decomp variable or a custom defined variable in Memory.addr
 ---@param location string The name of the variable to read from memory
@@ -139,7 +141,6 @@ function Memory.read(location, s)
 		else
 			return memory.readsize(Memory.decomp.addr[location].addr, size)
 		end]]
-
 	elseif Memory.special[location] ~= nil then
 		local t = {}
 		for _, v in ipairs(Memory.special[location].parameters) do
@@ -165,12 +166,12 @@ function Memory.read(location, s)
 					print("Error casting")
 				end
 			elseif words[1] == "Error" then
-				print("Error reading from " .. location .. ". Error: " .. words[2] .. " " .. table.concat(words, " ", 3, #words))
+				print("Error reading from " ..
+				location .. ". Error: " .. words[2] .. " " .. table.concat(words, " ", 3, #words))
 			else
 				print("Unknown result, reading " .. location .. ": " .. result)
 				return 0
 			end
-
 		else
 			print("Failed to run command " .. path .. ". Resulting handle was nil.")
 			return 0
@@ -299,7 +300,7 @@ function Memory.loadDecompAddrs(version)
 
 		t[1] = "0x" .. t[1]:sub(11) -- cut out the first 10 characters and add a "0x"
 
-		Memory.decomp.addr[t[2]] = { addr = tonumber(t[1]), name = t[2] }
+		Memory.decomp.addr[t[2]] = { addr = tonumber(t[1]), name = t[2], }
 
 		::continue::
 	end
