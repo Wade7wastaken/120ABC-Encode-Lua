@@ -1,6 +1,7 @@
 ---@meta
 
 --This file has meta definitions for the functions implemented in mupen64.
+--https://github.com/mkdasher/mupen64-rr-lua-/blob/master/lua/LuaConsole.cpp
 
 emu = {}
 memory = {}
@@ -24,6 +25,7 @@ function stop()
 end
 
 -- Emu Functions
+
 
 ---Similar to print, but only accepts strings
 ---@param str string
@@ -112,4 +114,35 @@ end
 ---Returns 1 if the emulator is paused and 0 if it is not
 ---@return boolean emu_paused
 function emu.getpause()
+end
+
+---Returns the current speed limit of the emulator
+---@return integer speed_limit
+function emu.getspeed()
+end
+
+---Sets the speed limit of the emulator
+---@param speed_limit integer
+function emu.speed(speed_limit)
+end
+
+---Sets the speed mode of the emulator
+---@param mode "normal"|"maximum"
+function emu.speedmode(mode)
+end
+
+---?
+---@param address string
+function emu.getaddress(address)
+end
+
+---Returns true if the currently playing movie is read only
+---@return boolean read_only
+function emu.isreadonly()
+end
+
+---Gets a system metric using the windows [GetSystemMetrics](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getsystemmetrics) function
+---@param param number Should really be integer, but it is cast to one anyway
+---@return integer metric
+function emu.getsystemmetrics(param)
 end
