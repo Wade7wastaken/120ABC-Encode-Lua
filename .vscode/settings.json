@@ -11,7 +11,7 @@
 		"quote_style": "double",
 		"call_arg_parentheses": "keep",
 		"max_line_length": "80",
-		"trailing_table_separator": "always",
+		"trailing_table_separator": "smart",
 		"insert_final_newline": "true",
 		"align_continuous_inline_comment": "false",
 		"space_around_table_field_list": "false",

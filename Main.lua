@@ -31,7 +31,7 @@ Segments = 1
 PreviousInput = input.get() -- initialized here so there's no nil error later
 InputDiff = {} -- the difference in inputs between the previous and current frames
 Joypad = joypad.get(1)
-PreviousJoypad = {A = false,}
+PreviousJoypad = {A = false}
 
 Path = debug.getinfo(1).source:sub(2):match("(.*\\)") -- From InputDirection
 dofile(Path .. "Misc.lua")

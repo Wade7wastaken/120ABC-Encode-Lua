@@ -6,7 +6,7 @@ Screen = {
 ---Initializes the Screen module
 local function init()
 	Screen.width = 4 / 3 *
-	Screen.init_width -- chose this factor because it gets 1440x1080 to 1920x1080
+		Screen.init_width -- chose this factor because it gets 1440x1080 to 1920x1080
 
 	if Screen.width ~= math.floor(Screen.width) then
 		print("Current resolution cannot scale to 16:9.")

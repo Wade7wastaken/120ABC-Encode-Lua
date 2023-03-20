@@ -22,7 +22,7 @@ local template = {
 	y = 0,
 	w = 500,
 	h = 500,
-	border = {size = 5, color = "#FFFFFFFF",},
+	border = {size = 5, color = "#FFFFFFFF"},
 	background = "#000000FF",
 }
 
