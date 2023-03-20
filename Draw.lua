@@ -429,10 +429,11 @@ function Draw.calc_stick_points() -- calculates the points for the "stick" polyg
 	local jy = Joypad.Y * Round(Draw.cstick.size / 2) / 128
 	local anglep = math.atan(jy, jx) + (math.pi / 2)
 	local anglem = math.atan(jy, jx) - (math.pi / 2)
-	return { {
-		Round(Draw.cstick.x + (math.cos(anglep) * Draw.cstick.stick.thickness)),
-		Round(Draw.cstick.y - (math.sin(anglep) * Draw.cstick.stick.thickness)),
-	},
+	return {
+		{
+			Round(Draw.cstick.x + (math.cos(anglep) * Draw.cstick.stick.thickness)),
+			Round(Draw.cstick.y - (math.sin(anglep) * Draw.cstick.stick.thickness)),
+		},
 		{
 			Round(Draw.cstick.x + (math.cos(anglep) * Draw.cstick.stick.thickness) + jx),
 			Round(Draw.cstick.y - (math.sin(anglep) * Draw.cstick.stick.thickness) - jy),
@@ -444,7 +445,8 @@ function Draw.calc_stick_points() -- calculates the points for the "stick" polyg
 		{
 			Round(Draw.cstick.x + (math.cos(anglem) * Draw.cstick.stick.thickness)),
 			Round(Draw.cstick.y - (math.sin(anglem) * Draw.cstick.stick.thickness)),
-		}, }
+		},
+	}
 end
 
 function Draw.calc_timer(vis) -- converts vi (60 fps) to h:m:s:ms

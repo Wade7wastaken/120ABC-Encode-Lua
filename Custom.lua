@@ -24,7 +24,7 @@ end
 function stop()
 end
 
--- Emu Functions
+-- emu Functions
 
 
 ---Similar to print, but only accepts strings
@@ -145,4 +145,25 @@ end
 ---@param param number Should really be integer, but it is cast to one anyway
 ---@return integer metric
 function emu.getsystemmetrics(param)
+end
+
+-- memory functions
+
+
+---Loads an unsigned byte from rdram and returns it. Alias for `memory.readbyte`
+---@param address integer The address to read from
+---@return integer value The unsigned byte at `address`
+function memory.LBU(address)
+end
+
+---Loads a signed byte from rdram and returns it. Alias for `memory.readbytesigned`
+---@param address integer The address to read from
+---@return integer value The signed byte at `address`
+function memory.LB(address)
+end
+
+---Loads an unsigned short (2 bytes) from rdram and returns it. Alias for `memory.readword`
+---@param address integer The address to read from
+---@return integer value The unsigned short at `address`
+function memory.LHU(address)
 end
