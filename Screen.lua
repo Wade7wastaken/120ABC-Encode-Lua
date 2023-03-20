@@ -4,7 +4,7 @@ Screen = {
 }
 
 ---Initializes the Screen module
-function Screen.init()
+local function init()
 	Screen.width = 4 / 3 * Screen.init_width -- chose this factor because it gets 1440x1080 to 1920x1080
 
 	if Screen.width ~= math.floor(Screen.width) then
@@ -18,6 +18,10 @@ function Screen.init()
 	Screen.extra_width = Screen.width - Screen.init_width
 	Screen.start = Screen.init_width
 	Screen.middle = Screen.init_width + (Screen.extra_width / 2)
+
+	if DRAWING then
+		Screen.expand()
+	end
 end
 
 ---Expands the screen
@@ -29,3 +33,5 @@ end
 function Screen.contract()
 	wgui.resize(Screen.init_width, Screen.init_height)
 end
+
+init()

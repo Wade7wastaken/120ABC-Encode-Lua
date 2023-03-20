@@ -185,9 +185,9 @@ function Draw.main()
 	-- Draw axes
 	wgui.setpen(Draw.cstick.axis.color)
 	wgui.line(Draw.cstick.x - (Draw.cstick.size / 2), Draw.cstick.y, Draw.cstick.x + (Draw.cstick.size / 2),
-	Draw.cstick.y)
+		Draw.cstick.y)
 	wgui.line(Draw.cstick.x, Draw.cstick.y - (Draw.cstick.size / 2), Draw.cstick.x,
-	Draw.cstick.y + (Draw.cstick.size / 2))
+		Draw.cstick.y + (Draw.cstick.size / 2))
 
 	-- Draw border
 	Draw.border_transparent(Draw.cstick.x, Draw.cstick.y, Draw.cstick.size, Draw.cstick.size,
@@ -206,8 +206,12 @@ function Draw.main()
 	wgui.setfont(Draw.cstick.display.font_size, Draw.cstick.display.font, Draw.cstick.display.style)
 	wgui.setcolor(Draw.cstick.display.text_color)
 	wgui.drawtext(string.format("X: %d", Joypad.X),
-		{ l = Draw.cstick.x + Draw.cstick.display.x_offset, t = Draw.cstick.y + Draw.cstick.display.y_offset, w = 200,
-			h = 30, }
+		{
+			l = Draw.cstick.x + Draw.cstick.display.x_offset,
+			t = Draw.cstick.y + Draw.cstick.display.y_offset,
+			w = 200,
+			h = 30,
+		}
 		, "l")
 	wgui.drawtext(string.format("Y: %d", Joypad.Y),
 		{
@@ -243,8 +247,8 @@ function Draw.main()
 	-- Draw variable slots and segment counter
 	Draw.set_text("slots")
 	wgui.drawtext("Segment",
-	{ l = Draw.slots.x, t = Draw.slots.start_y, w = Draw.slots.x_offset, h = Draw.slots.y_offset, }
-	, "l")
+		{ l = Draw.slots.x, t = Draw.slots.start_y, w = Draw.slots.x_offset, h = Draw.slots.y_offset, }
+		, "l")
 	wgui.drawtext(string.format("%d", Segments),
 		{
 			l = Draw.slots.x + Draw.slots.x_offset,
@@ -305,7 +309,7 @@ end
 function Draw.border(x, y, w, h, thickness, inner_color, border_color)
 	wgui.fillrecta(x - (w / 2), y - (h / 2), w, h, border_color)
 	wgui.fillrecta(x - (w / 2) + thickness, y - (h / 2) + thickness, w - (thickness * 2), h - (thickness * 2),
-	inner_color)
+		inner_color)
 end
 
 ---Draws a border around a circle in 2 draws. This function will overwrite the middle of the circle
@@ -380,8 +384,8 @@ function Draw.button(button, button_name, text, ty) -- Draws a button and text
 				Draw[button].color, Draw.buttons.border)
 		else
 			Draw.border(Draw[button].x, Draw[button].y, Draw[button].w, Draw[button].h, Draw.buttons.thickness,
-			Draw.backgrounda
-			, Draw.buttons.border)
+				Draw.backgrounda
+				, Draw.buttons.border)
 		end
 	end
 	wgui.setfont(Draw[button].font_size, Draw[button].font, Draw[button].style)

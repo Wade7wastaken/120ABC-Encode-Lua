@@ -12,7 +12,7 @@ savestate = {}
 iohelper = {}
 
 
---Global Function
+-- Global Functions
 
 ---Prints a value to the lua console
 ---@param data any
@@ -23,7 +23,7 @@ end
 function stop()
 end
 
---Emu Functions
+-- Emu Functions
 
 ---Similar to print, but only accepts strings
 ---@param str string
