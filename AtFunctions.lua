@@ -52,7 +52,8 @@ function AtInput()
 
 		local global_timer_data = GlobalTimerChanges[Frame]
 		if global_timer_data ~= nil then
-			Memory.write("globaltimer", Memory.read("globaltimer") + global_timer_data)
+			Memory.write("globaltimer",
+			Memory.read("globaltimer") + global_timer_data)
 			print("Changing global timer by " .. global_timer_data)
 			inc_segments = true
 		end
@@ -77,7 +78,8 @@ function AtInput()
 	local prev_author = nil -- the previously checked frame
 	for _, value in ipairs(AuthorIndices) do -- for every author change in the index table
 		if Frame < value then -- if the frame of that author change if more than the current frame
-			Draw.author.author = AuthorChanges[prev_author] -- set the author to the previous author change
+			Draw.author.author = AuthorChanges
+			[prev_author] -- set the author to the previous author change
 			break
 		end
 		prev_author = value
@@ -88,12 +90,14 @@ function AtInput()
 		Draw.author.author = AuthorChanges[AuthorIndices[#AuthorIndices]]
 	end
 
-	Draw.slots.data = { { name = "", value = "", }, { name = "", value = "", }, { name = "", value = "", }, } -- clear the slots
+	Draw.slots.data = {{name = "", value = "",}, {name = "", value = "",},
+		{name = "", value = "",},} -- clear the slots
 	for _, value in ipairs(SlotIndices) do
 		if Frame < value then break end
 		for _, value2 in ipairs(SlotChanges[value]) do
 			if value2[2] ~= "" then
-				Draw.slots.data[value2[1]].name = Memory.get_display_name(value2[2])
+				Draw.slots.data[value2[1]].name = Memory.get_display_name(value2
+				[2])
 
 				local mem = Memory.read(value2[2])
 
@@ -122,7 +126,7 @@ function AtInput()
 		end
 	end
 
-	if Memory.read('action') == 6409 then -- end cutscene action
+	if Memory.read("action") == 6409 then -- end cutscene action
 		Draw.timer.active = false -- stop the timer when the grand star is collected
 	end
 

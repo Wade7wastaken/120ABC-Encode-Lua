@@ -93,20 +93,20 @@ Memory = {
 			process = function(t)
 				return math.sqrt((t[1] ^ 2) + (t[2] ^ 2))
 			end,
-			parameters = { "xslidespeed", "zslidespeed", },
+			parameters = {"xslidespeed", "zslidespeed",},
 			DisplayName = "H Slide Speed",
 		},
 		holp = {
 			process = function(t)
 				return t
 			end,
-			parameters = { "holpx", "holpy", "holpz", },
+			parameters = {"holpx", "holpy", "holpz",},
 			DisplayName = "HOLP",
 		},
 	},
 	objmap = {
-		next_obj = { addr = 0x08, size = 4, }, -- {offset, size (0 is float)}
-		X = { addr = 0xA0, size = 0, },
+		next_obj = {addr = 0x08, size = 4,}, -- {offset, size (0 is float)}
+		X = {addr = 0xA0, size = 0,},
 	},
 }
 ---Reads a value from memory. Location is a variable in Memory.addr or Memory.special
@@ -117,7 +117,8 @@ function Memory.read(location)
 		if Memory.addr[location].size == 0 then
 			return memory.readfloat(Memory.addr[location][Memory.version])
 		else
-			return memory.readsize(Memory.addr[location][Memory.version], Memory.addr[location].size)
+			return memory.readsize(Memory.addr[location][Memory.version],
+			Memory.addr[location].size)
 		end
 	elseif Memory.special[location] ~= nil then
 		local t = {}
@@ -140,7 +141,8 @@ function Memory.write(location, value)
 		if Memory.addr[location].size == 0 then
 			memory.writefloat(Memory.addr[location][Memory.version], value)
 		else
-			memory.writesize(Memory.addr[location][Memory.version], Memory.addr[location].size, value)
+			memory.writesize(Memory.addr[location][Memory.version],
+			Memory.addr[location].size, value)
 		end
 	else
 		print("Failed to find memory location " .. location)

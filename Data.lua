@@ -1,11 +1,12 @@
 -- Can't do anything before frame 157, each frame is a table of changes
 -- each change sets the variable of the corresponding slot. Setting a slot to an empty string disables it
-SlotChanges[2182] = { { 1, "hspeed", "%.3f", }, { 2, "hslidespeed", "%.3f", }, { 3, "holp", "%.0f %.0f %.0f", }, }
-SlotChanges[94161] = { { 1, "", }, { 2, "", }, { 3, "", }, }
-SlotChanges[109621] = { { 1, "hspeed", "%.3f", }, { 2, "hslidespeed", "%.3f", }, }
-SlotChanges[111994] = { { 1, "", }, { 2, "", }, }
-SlotChanges[112306] = { { 1, "hspeed", "%.3f", }, { 2, "hslidespeed", "%.3f", }, }
-SlotChanges[113200] = { { 1, "", }, { 2, "", }, }
+SlotChanges[2182] = {{1, "hspeed", "%.3f",}, {2, "hslidespeed", "%.3f",},
+	{3, "holp", "%.0f %.0f %.0f",},}
+SlotChanges[94161] = {{1, "",}, {2, "",}, {3, "",},}
+SlotChanges[109621] = {{1, "hspeed", "%.3f",}, {2, "hslidespeed", "%.3f",},}
+SlotChanges[111994] = {{1, "",}, {2, "",},}
+SlotChanges[112306] = {{1, "hspeed", "%.3f",}, {2, "hslidespeed", "%.3f",},}
+SlotChanges[113200] = {{1, "",}, {2, "",},}
 
 RNGChanges[2182] = 48413
 RNGChanges[103409] = 10

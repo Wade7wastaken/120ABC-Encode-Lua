@@ -22,7 +22,7 @@ local template = {
 	y = 0,
 	w = 500,
 	h = 500,
-	border = { size = 5, color = "#FFFFFFFF", },
+	border = {size = 5, color = "#FFFFFFFF",},
 	background = "#000000FF",
 }
 
@@ -55,7 +55,8 @@ function Map.draw()
 			data.h = input.get().ymouse
 
 			-- draw background
-			wgui.fillrecta(data.x - data.border.size, data.y - data.border.size, data.w + (2 * data.border.size),
+			wgui.fillrecta(data.x - data.border.size, data.y - data.border.size,
+				data.w + (2 * data.border.size),
 				data.h + (2 * data.border.size), data.border.color)
 			wgui.fillrecta(data.x, data.y, data.w, data.h, data.background)
 
@@ -75,8 +76,10 @@ function Map.draw()
 			print(ar)
 
 			wgui.drawimage(Image.get(mapfname), data.x, data.y, data.w, data.h,
-				data.data.x - (imagesize / (2 * data.data.zoom)), data.data.y - (imagesize / (2 * data.data.zoom * ar)),
-				(imagesize / data.data.zoom), (imagesize / (ar * data.data.zoom)), 0)
+				data.data.x - (imagesize / (2 * data.data.zoom)),
+				data.data.y - (imagesize / (2 * data.data.zoom * ar)),
+				(imagesize / data.data.zoom), (imagesize / (ar * data.data.zoom)),
+				0)
 
 			if data.data.mario == true then
 				local fname = "Images/Objects/Mario Top.png"
