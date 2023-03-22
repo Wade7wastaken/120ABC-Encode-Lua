@@ -1,6 +1,6 @@
 Memory = {
-	---@type "JP"|"US"
-	version = nil, -- default to US
+	---@type version
+	version = nil,
 	addr = {
 		mariox = {
 			JP = 0x80339E3C,
@@ -135,7 +135,6 @@ end
 ---Writes a value to memory. Location is a variable in Memory.addr or Memory.special
 ---@param location string The name of the variable to write to memory
 ---@param value integer|number The value to write to memory
----@return integer|nil
 function Memory.write(location, value)
 	if Memory.addr[location] ~= nil then
 		if Memory.addr[location].size == 0 then
@@ -146,7 +145,6 @@ function Memory.write(location, value)
 		end
 	else
 		print("Failed to find memory location " .. location)
-		return 0
 	end
 end
 
@@ -203,8 +201,8 @@ function Memory.get_object_data(index, attr)
 end
 
 ---Determines the SM64 version this script is being run on
----@return "US"|"JP"
-function Memory.determine_version() -- From InputDirection
+---@return version
+local function determine_version() -- From InputDirection
 	if memory.readsize(0x00B22B24, 4) == 1174429700 then -- JP
 		return "JP"
 	else -- US
@@ -214,7 +212,7 @@ end
 
 ---Initializes the Memory module
 local function init()
-	Memory.version = Memory.determine_version()
+	Memory.version = determine_version()
 end
 
 init()

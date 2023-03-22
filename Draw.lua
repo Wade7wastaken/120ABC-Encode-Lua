@@ -155,6 +155,211 @@ Draw = {
 	},
 }
 
+-- Drawing utilities
+
+---Sets the font and text color for a given object
+---@param object string The table in the Draw table that contains the font information
+local function set_text(object)
+	wgui.setfont(Draw[object].font_size, Draw[object].font, Draw[object].style)
+	wgui.setcolor(Draw[object].text_color)
+end
+
+---Calculates the points for the "stick" polygon
+---@return table
+local function calc_stick_points()
+	-- finds the angle the stick makes with the x-axis
+	-- adds and subtracts 2 pi to get the perpendicular angles
+	local jx = Joypad.X * Round(Draw.cstick.size / 2) / 128
+	local jy = Joypad.Y * Round(Draw.cstick.size / 2) / 128
+	local anglep = math.atan(jy, jx) + (math.pi / 2)
+	local anglem = math.atan(jy, jx) - (math.pi / 2)
+	return {
+		{
+			Round(Draw.cstick.x +
+				(math.cos(anglep) * Draw.cstick.stick.thickness)),
+			Round(Draw.cstick.y -
+				(math.sin(anglep) * Draw.cstick.stick.thickness)),
+		},
+		{
+			Round(Draw.cstick.x +
+				(math.cos(anglep) * Draw.cstick.stick.thickness) + jx),
+			Round(Draw.cstick.y -
+				(math.sin(anglep) * Draw.cstick.stick.thickness) - jy),
+		},
+		{
+			Round(Draw.cstick.x +
+				(math.cos(anglem) * Draw.cstick.stick.thickness) + jx),
+			Round(Draw.cstick.y -
+				(math.sin(anglem) * Draw.cstick.stick.thickness) - jy),
+		},
+		{
+			Round(Draw.cstick.x +
+				(math.cos(anglem) * Draw.cstick.stick.thickness)),
+			Round(Draw.cstick.y -
+				(math.sin(anglem) * Draw.cstick.stick.thickness)),
+		},
+	}
+end
+
+-- Shape drawing functions
+
+---Draws a border around a rectangle using 4 draws, but doesn't overwrite the middle. The border is drawn on the inside of the rectangle
+---@param x integer The x-coordinate in pixels of the middle of the rectangle from the top left of the screen
+---@param y integer The y-coordinate in pixels of the middle of the rectangle from the top left of the screen
+---@param w integer The width of the rectangle in pixels
+---@param h integer The height of the rectangle in pixels
+---@param thickness integer The size of the border in pixels. The border is drawn completely inside the rectangle
+---@param color string The color of the border
+local function border_transparent(x, y, w, h, thickness, color)
+	wgui.fillrecta(x - (w / 2), y - (h / 2), thickness, h, color)
+	wgui.fillrecta(x - (w / 2) + thickness, y + (h / 2) - thickness,
+		w - (thickness * 2), thickness, color)
+	wgui.fillrecta(x + (w / 2) - thickness, y - (h / 2), thickness, h, color)
+	wgui.fillrecta(x - (w / 2) + thickness, y - (h / 2), w - (thickness * 2),
+		thickness, color)
+end
+
+---Draws a border around a rectangle using 2 draws. This function will overwrite the middle of the rectangle. The border is drawn on the inside of the rectangle
+---@param x integer The x-coordinate in pixels of the middle of the rectangle from the top left of the screen
+---@param y integer The y-coordinate in pixels of the middle of the rectangle from the top left of the screen
+---@param w integer The width of the rectangle in pixels
+---@param h integer The height of the rectangle in pixels
+---@param thickness integer The size of the border in pixels. The border is drawn completely inside the rectangle
+---@param inner_color string The color of the overwritten middle part of the rectangle
+---@param border_color string The color of the border
+local function border(x, y, w, h, thickness, inner_color, border_color)
+	wgui.fillrecta(x - (w / 2), y - (h / 2), w, h, border_color)
+	wgui.fillrecta(x - (w / 2) + thickness, y - (h / 2) + thickness,
+		w - (thickness * 2), h - (thickness * 2),
+		inner_color)
+end
+
+---Draws a border around a circle in 2 draws. This function will overwrite the middle of the circle
+---@param x integer The x-coordinate in pixels of the middle of the circle from the top left of the screen
+---@param y integer The y-coordinate in pixels of the middle of the circle from the top left of the screen
+---@param r integer The radius of the circle in pixels
+---@param thickness integer The size of the border in pixels. The border is drawn completely inside the circle
+---@param inner_color string The color of the overwritten middle part of the rectangle
+---@param border_color string The color of the border
+local function circle_border(x, y, r, thickness, inner_color, border_color)
+	wgui.fillellipsea(x - r, y - r, r * 2, r * 2, border_color)
+	wgui.fillellipsea(x - r + thickness, y - r + thickness, (r - thickness) * 2,
+		(r - thickness) * 2, inner_color)
+end
+
+---Draws a filled in circle
+---@param x integer The x-coordinate in pixels of the middle of the circle from the top left of the screen
+---@param y integer The y-coordinate in pixels of the middle of the circle from the top left of the screen
+---@param r integer The radius of the circle in pixels
+---@param color string The color of the circle
+local function fill_circle(x, y, r, color)
+	wgui.fillellipsea(x - r, y - r, r * 2, r * 2, color)
+end
+
+---Draws the border of an equilateral triangle. This function will overwrite the middle of the triangle
+---@param x integer The x-coordinate of the center of the triangle
+---@param y integer The y-coordinate of the center of the triangle
+---@param length integer The length of the triangle's side lengths
+---@param angle integer|number The angle in radians that the triangle is rotated
+---@param thickness integer The thickness of the border
+---@param inner_color string The color of the middle of the triangle
+---@param border_color string The color of the border
+local function triangle(x, y, length, angle, thickness, inner_color, border_color) -- draws a triangle with a border
+	wgui.fillpolygona({{
+		Round(x + (math.cos((math.pi / 2) + angle) * length)),
+		Round(y - (math.sin((math.pi / 2) + angle) * length)),
+	}, {
+		Round(x + (math.cos((7 / 6 * math.pi) + angle) * length)),
+		Round(y - (math.sin((7 / 6 * math.pi) + angle) * length)),
+	}, {
+		Round(x + (math.cos((11 / 6 * math.pi) + angle) * length)),
+		Round(y - (math.sin((11 / 6 * math.pi) + angle) * length)),
+	},}, border_color)
+	wgui.fillpolygona({{
+		Round(x + (math.cos((math.pi / 2) + angle) * (length - thickness))),
+		Round(y - (math.sin((math.pi / 2) + angle) * (length - thickness))),
+	}, {
+		Round(x + (math.cos((7 / 6 * math.pi) + angle) * (length - thickness))),
+		Round(y - (math.sin((7 / 6 * math.pi) + angle) * (length - thickness))),
+	}, {
+		Round(x + (math.cos((11 / 6 * math.pi) + angle) * (length - thickness))),
+		Round(y - (math.sin((11 / 6 * math.pi) + angle) * (length - thickness))),
+	},}, inner_color)
+end
+
+-- Complex drawing functions
+
+local function button_all(button, button_name, text, ty) -- Draws a button and text
+	if ty == 0 then -- circle
+		if Joypad[button_name] then
+			circle_border(Draw[button].x, Draw[button].y,
+				Draw[button].radius, Draw.buttons.thickness,
+				Draw[button].color,
+				Draw.buttons.border)
+		else
+			circle_border(Draw[button].x, Draw[button].y,
+				Draw[button].radius, Draw.buttons.thickness,
+				Draw.backgrounda,
+				Draw.buttons.border)
+		end
+	end
+	if ty == 1 then -- square
+		if Joypad[button_name] then
+			border(Draw[button].x, Draw[button].y, Draw[button].w,
+				Draw[button].h, Draw.buttons.thickness,
+				Draw[button].color, Draw.buttons.border)
+		else
+			border(Draw[button].x, Draw[button].y, Draw[button].w,
+				Draw[button].h, Draw.buttons.thickness,
+				Draw.backgrounda
+				, Draw.buttons.border)
+		end
+	end
+	wgui.setfont(Draw[button].font_size, Draw[button].font, Draw[button].style)
+	wgui.setcolor(Draw.buttons.text_color)
+	wgui.drawtext(text,
+		{
+			l = Draw[button].x + Draw[button].x_offset,
+			t = Draw[button].y + Draw[button].y_offset,
+			w = 200,
+			h = 100,
+		},
+		"l")
+end
+
+local function cbutton(joypad, offset_mult, angle)
+	if Joypad[joypad] then
+		circle_border(
+			Draw.cbuttons.x + (Draw.cbuttons.offset * offset_mult[1]),
+			Draw.cbuttons.y + (Draw.cbuttons.offset * offset_mult[2]),
+			Draw.cbuttons.radius, Draw.buttons.thickness,
+			Draw.cbuttons.color, Draw.buttons.border)
+		triangle(Draw.cbuttons.x + (Draw.cbuttons.offset * offset_mult[1]),
+			Draw.cbuttons.y + (Draw.cbuttons.offset * offset_mult[2]),
+			Draw.cbuttons.triangle_size, angle,
+			Draw.cbuttons.triangle_thickness, Draw.cbuttons.color, "black")
+	else
+		circle_border(
+			Draw.cbuttons.x + (Draw.cbuttons.offset * offset_mult[1]),
+			Draw.cbuttons.y + (Draw.cbuttons.offset * offset_mult[2]),
+			Draw.cbuttons.radius, Draw.buttons.thickness,
+			Draw.backgrounda, Draw.buttons.border)
+		triangle(Draw.cbuttons.x + (Draw.cbuttons.offset * offset_mult[1]),
+			Draw.cbuttons.y + (Draw.cbuttons.offset * offset_mult[2]),
+			Draw.cbuttons.triangle_size, angle,
+			Draw.cbuttons.triangle_thickness, Draw.backgrounda,
+			Draw.buttons.border)
+	end
+end
+
+local function calc_timer(vis) -- converts vi (60 fps) to h:m:s:ms
+	local h = vis // 216000
+	local min = (vis // 3600) - (h * 60)
+	local s = (vis // 60) - (min * 60) - (h * 3600)
+	local ms = Round((vis * 5 / 3) - (s * 100) - (min * 6000) - (h * 360000))
+	return string.format("%02d:%02d:%02d.%02d", h, min, s, ms)
+end
+
 ---The main drawing function
 function Draw.main()
 	-- Clear the screen
@@ -162,14 +367,15 @@ function Draw.main()
 		Draw.backgrounda)
 
 	-- Draw author
-	Draw.set_text("author")
+	set_text("author")
 	wgui.drawtext("Author: " .. Draw.author.author,
 		{
 			l = Screen.init_width,
 			t = Draw.author.y,
 			w = Screen.extra_width,
 			h = 100,
-		}, "c")
+		},
+		"c")
 
 	-- Draw timer
 	wgui.setfont(Draw.timer.font_size, Draw.timer.font, Draw.timer.style)
@@ -179,7 +385,7 @@ function Draw.main()
 	else
 		wgui.setcolor(Draw.timer.stopped_color)
 	end
-	wgui.drawtext(Draw.calc_timer(Draw.time),
+	wgui.drawtext(calc_timer(Draw.time),
 		{
 			l = Screen.init_width,
 			t = Draw.timer.y,
@@ -190,7 +396,7 @@ function Draw.main()
 
 
 	-- Draw c stick
-	Draw.circle_border(Draw.cstick.x, Draw.cstick.y, Draw.cstick.size / 2,
+	circle_border(Draw.cstick.x, Draw.cstick.y, Draw.cstick.size / 2,
 		Draw.cstick.circle.thickness, Draw.background,
 		Draw.cstick.circle.color)
 
@@ -204,18 +410,18 @@ function Draw.main()
 		Draw.cstick.y + (Draw.cstick.size / 2))
 
 	-- Draw border
-	Draw.border_transparent(Draw.cstick.x, Draw.cstick.y, Draw.cstick.size,
+	border_transparent(Draw.cstick.x, Draw.cstick.y, Draw.cstick.size,
 		Draw.cstick.size,
 		Draw.cstick.border.thickness,
 		Draw.cstick.border.color)
 
 	-- Draw stick
-	wgui.fillpolygona(Draw.calc_stick_points(), Draw.cstick.stick.color)
-	Draw.fillcircle(Draw.cstick.x, Draw.cstick.y, Draw.cstick.stick.thickness,
+	wgui.fillpolygona(calc_stick_points(), Draw.cstick.stick.color)
+	fill_circle(Draw.cstick.x, Draw.cstick.y, Draw.cstick.stick.thickness,
 		Draw.cstick.stick.color)
 
 	-- Draw ball
-	Draw.fillcircle(
+	fill_circle(
 		Draw.cstick.x + (Joypad.X * Round(Draw.cstick.size / 2) / 128),
 		Draw.cstick.y - (Joypad.Y * Round(Draw.cstick.size / 2) / 128),
 		Draw.cstick.ball.radius, Draw.cstick.ball.color)
@@ -243,15 +449,15 @@ function Draw.main()
 
 
 	-- Draw buttons
-	Draw.button("a", "A", "A", 0) -- table name, joypad name, text, type
-	Draw.button("b", "B", "B", 0)
-	Draw.button("s", "start", "S", 0)
-	Draw.button("z", "Z", "Z", 1)
-	Draw.button("r", "R", "R", 1)
+	button_all("a", "A", "A", 0) -- table name, joypad name, text, type
+	button_all("b", "B", "B", 0)
+	button_all("s", "start", "S", 0)
+	button_all("z", "Z", "Z", 1)
+	button_all("r", "R", "R", 1)
 
 
 	-- Draw c buttons
-	Draw.set_text("cbuttons")
+	set_text("cbuttons")
 	wgui.drawtext("C",
 		{
 			l = Draw.cbuttons.x + Draw.cbuttons.text_offset[1],
@@ -259,13 +465,13 @@ function Draw.main()
 			w = 200,
 			h = 100,
 		}, "l")
-	Draw.cbutton("Cup", {0, -1}, 0) -- joypad name, table with multipliers for the x and y offsets, angle
-	Draw.cbutton("Cright", {1, 0}, -math.pi / 2) -- table example: {0, 0} means no offset, {1, 0} means x offset, {0, -1} means negative y offset
-	Draw.cbutton("Cdown", {0, 1}, math.pi)
-	Draw.cbutton("Cleft", {-1, 0}, math.pi / 2)
+	cbutton("Cup", {0, -1}, 0) -- joypad name, table with multipliers for the x and y offsets, angle
+	cbutton("Cright", {1, 0}, -math.pi / 2) -- table example: {0, 0} means no offset, {1, 0} means x offset, {0, -1} means negative y offset
+	cbutton("Cdown", {0, 1}, math.pi)
+	cbutton("Cleft", {-1, 0}, math.pi / 2)
 
 	-- Draw variable slots and segment counter
-	Draw.set_text("slots")
+	set_text("slots")
 	wgui.drawtext("Segment",
 		{
 			l = Draw.slots.x,
@@ -303,7 +509,7 @@ function Draw.main()
 	end
 
 	-- Draw a press counter
-	Draw.set_text("apress")
+	set_text("apress")
 	wgui.drawtext("A Presses:",
 		{
 			l = Screen.init_width,
@@ -319,207 +525,4 @@ function Draw.main()
 			w = Screen.extra_width,
 			h = 100,
 		}, "c")
-end
-
--- Shape drawing functions
-
----Draws a border around a rectangle using 4 draws, but doesn't overwrite the middle. The border is drawn on the inside of the rectangle
----@param x integer The x-coordinate in pixels of the middle of the rectangle from the top left of the screen
----@param y integer The y-coordinate in pixels of the middle of the rectangle from the top left of the screen
----@param w integer The width of the rectangle in pixels
----@param h integer The height of the rectangle in pixels
----@param thickness integer The size of the border in pixels. The border is drawn completely inside the rectangle
----@param color string The color of the border
-function Draw.border_transparent(x, y, w, h, thickness, color)
-	wgui.fillrecta(x - (w / 2), y - (h / 2), thickness, h, color)
-	wgui.fillrecta(x - (w / 2) + thickness, y + (h / 2) - thickness,
-		w - (thickness * 2), thickness, color)
-	wgui.fillrecta(x + (w / 2) - thickness, y - (h / 2), thickness, h, color)
-	wgui.fillrecta(x - (w / 2) + thickness, y - (h / 2), w - (thickness * 2),
-		thickness, color)
-end
-
----Draws a border around a rectangle using 2 draws. This function will overwrite the middle of the rectangle. The border is drawn on the inside of the rectangle
----@param x integer The x-coordinate in pixels of the middle of the rectangle from the top left of the screen
----@param y integer The y-coordinate in pixels of the middle of the rectangle from the top left of the screen
----@param w integer The width of the rectangle in pixels
----@param h integer The height of the rectangle in pixels
----@param thickness integer The size of the border in pixels. The border is drawn completely inside the rectangle
----@param inner_color string The color of the overwritten middle part of the rectangle
----@param border_color string The color of the border
-function Draw.border(x, y, w, h, thickness, inner_color, border_color)
-	wgui.fillrecta(x - (w / 2), y - (h / 2), w, h, border_color)
-	wgui.fillrecta(x - (w / 2) + thickness, y - (h / 2) + thickness,
-		w - (thickness * 2), h - (thickness * 2),
-		inner_color)
-end
-
----Draws a border around a circle in 2 draws. This function will overwrite the middle of the circle
----@param x integer The x-coordinate in pixels of the middle of the circle from the top left of the screen
----@param y integer The y-coordinate in pixels of the middle of the circle from the top left of the screen
----@param r integer The radius of the circle in pixels
----@param thickness integer The size of the border in pixels. The border is drawn completely inside the circle
----@param inner_color string The color of the overwritten middle part of the rectangle
----@param border_color string The color of the border
-function Draw.circle_border(x, y, r, thickness, inner_color, border_color)
-	wgui.fillellipsea(x - r, y - r, r * 2, r * 2, border_color)
-	wgui.fillellipsea(x - r + thickness, y - r + thickness, (r - thickness) * 2,
-		(r - thickness) * 2, inner_color)
-end
-
----Draws a filled in circle
----@param x integer The x-coordinate in pixels of the middle of the circle from the top left of the screen
----@param y integer The y-coordinate in pixels of the middle of the circle from the top left of the screen
----@param r integer The radius of the circle in pixels
----@param color string The color of the circle
-function Draw.fillcircle(x, y, r, color)
-	wgui.fillellipsea(x - r, y - r, r * 2, r * 2, color)
-end
-
----Draws the border of an equilateral triangle. This function will overwrite the middle of the triangle
----@param x integer The x-coordinate of the center of the triangle
----@param y integer The y-coordinate of the center of the triangle
----@param length integer The length of the triangle's side lengths
----@param angle integer|number The angle in radians that the triangle is rotated
----@param thickness integer The thickness of the border
----@param inner_color string The color of the middle of the triangle
----@param border_color string The color of the border
-function Draw.triangle(x, y, length, angle, thickness, inner_color, border_color) -- draws a triangle with a border
-	wgui.fillpolygona({{
-		Round(x + (math.cos((math.pi / 2) + angle) * length)),
-		Round(y - (math.sin((math.pi / 2) + angle) * length)),
-	}, {
-		Round(x + (math.cos((7 / 6 * math.pi) + angle) * length)),
-		Round(y - (math.sin((7 / 6 * math.pi) + angle) * length)),
-	}, {
-		Round(x + (math.cos((11 / 6 * math.pi) + angle) * length)),
-		Round(y - (math.sin((11 / 6 * math.pi) + angle) * length)),
-	},}, border_color)
-	wgui.fillpolygona({{
-		Round(x + (math.cos((math.pi / 2) + angle) * (length - thickness))),
-		Round(y - (math.sin((math.pi / 2) + angle) * (length - thickness))),
-	}, {
-		Round(x + (math.cos((7 / 6 * math.pi) + angle) * (length - thickness))),
-		Round(y - (math.sin((7 / 6 * math.pi) + angle) * (length - thickness))),
-	}, {
-		Round(x + (math.cos((11 / 6 * math.pi) + angle) * (length - thickness))),
-		Round(y - (math.sin((11 / 6 * math.pi) + angle) * (length - thickness))),
-	},}, inner_color)
-end
-
--- Complex drawing functions
-
-function Draw.button(button, button_name, text, ty) -- Draws a button and text
-	if ty == 0 then -- circle
-		if Joypad[button_name] then
-			Draw.circle_border(Draw[button].x, Draw[button].y,
-				Draw[button].radius, Draw.buttons.thickness,
-				Draw[button].color,
-				Draw.buttons.border)
-		else
-			Draw.circle_border(Draw[button].x, Draw[button].y,
-				Draw[button].radius, Draw.buttons.thickness,
-				Draw.backgrounda,
-				Draw.buttons.border)
-		end
-	end
-	if ty == 1 then -- square
-		if Joypad[button_name] then
-			Draw.border(Draw[button].x, Draw[button].y, Draw[button].w,
-				Draw[button].h, Draw.buttons.thickness,
-				Draw[button].color, Draw.buttons.border)
-		else
-			Draw.border(Draw[button].x, Draw[button].y, Draw[button].w,
-				Draw[button].h, Draw.buttons.thickness,
-				Draw.backgrounda
-				, Draw.buttons.border)
-		end
-	end
-	wgui.setfont(Draw[button].font_size, Draw[button].font, Draw[button].style)
-	wgui.setcolor(Draw.buttons.text_color)
-	wgui.drawtext(text,
-		{
-			l = Draw[button].x + Draw[button].x_offset,
-			t = Draw[button].y + Draw[button].y_offset,
-			w = 200,
-			h = 100,
-		},
-		"l")
-end
-
-function Draw.cbutton(joypad, offset_mult, angle)
-	if Joypad[joypad] then
-		Draw.circle_border(
-			Draw.cbuttons.x + (Draw.cbuttons.offset * offset_mult[1]),
-			Draw.cbuttons.y + (Draw.cbuttons.offset * offset_mult[2]),
-			Draw.cbuttons.radius, Draw.buttons.thickness,
-			Draw.cbuttons.color, Draw.buttons.border)
-		Draw.triangle(Draw.cbuttons.x + (Draw.cbuttons.offset * offset_mult[1]),
-			Draw.cbuttons.y + (Draw.cbuttons.offset * offset_mult[2]),
-			Draw.cbuttons.triangle_size, angle,
-			Draw.cbuttons.triangle_thickness, Draw.cbuttons.color, "black")
-	else
-		Draw.circle_border(
-			Draw.cbuttons.x + (Draw.cbuttons.offset * offset_mult[1]),
-			Draw.cbuttons.y + (Draw.cbuttons.offset * offset_mult[2]),
-			Draw.cbuttons.radius, Draw.buttons.thickness,
-			Draw.backgrounda, Draw.buttons.border)
-		Draw.triangle(Draw.cbuttons.x + (Draw.cbuttons.offset * offset_mult[1]),
-			Draw.cbuttons.y + (Draw.cbuttons.offset * offset_mult[2]),
-			Draw.cbuttons.triangle_size, angle,
-			Draw.cbuttons.triangle_thickness, Draw.backgrounda,
-			Draw.buttons.border)
-	end
-end
-
--- Drawing utilities
-
----Sets the font and text color for a given object
----@param object string The table in the Draw table that contains the font information
-function Draw.set_text(object)
-	wgui.setfont(Draw[object].font_size, Draw[object].font, Draw[object].style)
-	wgui.setcolor(Draw[object].text_color)
-end
-
-function Draw.calc_stick_points() -- calculates the points for the "stick" polygon
-	-- finds the angle the stick makes with the x-axis
-	-- adds and subtracts 2 pi to get the perpendicular angles
-	local jx = Joypad.X * Round(Draw.cstick.size / 2) / 128
-	local jy = Joypad.Y * Round(Draw.cstick.size / 2) / 128
-	local anglep = math.atan(jy, jx) + (math.pi / 2)
-	local anglem = math.atan(jy, jx) - (math.pi / 2)
-	return {
-		{
-			Round(Draw.cstick.x +
-				(math.cos(anglep) * Draw.cstick.stick.thickness)),
-			Round(Draw.cstick.y -
-				(math.sin(anglep) * Draw.cstick.stick.thickness)),
-		},
-		{
-			Round(Draw.cstick.x +
-				(math.cos(anglep) * Draw.cstick.stick.thickness) + jx),
-			Round(Draw.cstick.y -
-				(math.sin(anglep) * Draw.cstick.stick.thickness) - jy),
-		},
-		{
-			Round(Draw.cstick.x +
-				(math.cos(anglem) * Draw.cstick.stick.thickness) + jx),
-			Round(Draw.cstick.y -
-				(math.sin(anglem) * Draw.cstick.stick.thickness) - jy),
-		},
-		{
-			Round(Draw.cstick.x +
-				(math.cos(anglem) * Draw.cstick.stick.thickness)),
-			Round(Draw.cstick.y -
-				(math.sin(anglem) * Draw.cstick.stick.thickness)),
-		},
-	}
-end
-
-function Draw.calc_timer(vis) -- converts vi (60 fps) to h:m:s:ms
-	local h = vis // 216000
-	local min = (vis // 3600) - (h * 60)
-	local s = (vis // 60) - (min * 60) - (h * 3600)
-	local ms = Round((vis * 5 / 3) - (s * 100) - (min * 6000) - (h * 360000))
-	return string.format("%02d:%02d:%02d.%02d", h, min, s, ms)
 end
