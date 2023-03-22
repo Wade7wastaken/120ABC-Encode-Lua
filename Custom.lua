@@ -167,3 +167,8 @@ end
 ---@return integer value The unsigned short at `address`
 function memory.LHU(address)
 end
+
+---Gets the current width and height of the window
+---@return {width: integer, height: integer}
+function wgui.info()
+end

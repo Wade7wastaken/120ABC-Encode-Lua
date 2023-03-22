@@ -1,0 +1,61 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<SavedSettings>
+  <UseNightMode>false</UseNightMode>
+  <DisplayYawAnglesAsUnsigned>true</DisplayYawAnglesAsUnsigned>
+  <VariableValuesFlushRight>true</VariableValuesFlushRight>
+  <StartSlotIndexsFromOne>true</StartSlotIndexsFromOne>
+  <OffsetGotoRetrieveFunctions>true</OffsetGotoRetrieveFunctions>
+  <MoveCameraWithPu>true</MoveCameraWithPu>
+  <ScaleDiagonalPositionControllerButtons>true</ScaleDiagonalPositionControllerButtons>
+  <ExcludeDustForClosestObject>true</ExcludeDustForClosestObject>
+  <UseMisalignmentOffsetForDistanceToLine>true</UseMisalignmentOffsetForDistanceToLine>
+  <DontRoundValuesToZero>true</DontRoundValuesToZero>
+  <DisplayAsHexUsesMemory>true</DisplayAsHexUsesMemory>
+  <NeutralizeTrianglesWith0x15>true</NeutralizeTrianglesWith0x15>
+  <CloningUpdatesHolpType>true</CloningUpdatesHolpType>
+  <UseInGameTrigForAngleLogic>false</UseInGameTrigForAngleLogic>
+  <UseExtendedLevelBoundaries>false</UseExtendedLevelBoundaries>
+  <UseExpandedRamSize>true</UseExpandedRamSize>
+  <DoQuickStartup>false</DoQuickStartup>
+  <TabOrder>
+    <Tab>Object</Tab>
+    <Tab>Mario</Tab>
+    <Tab>HUD</Tab>
+    <Tab>Camera</Tab>
+    <Tab>Triangles</Tab>
+    <Tab>File</Tab>
+    <Tab>M64</Tab>
+    <Tab>Actions</Tab>
+    <Tab>Input</Tab>
+    <Tab>Water</Tab>
+    <Tab>Misc</Tab>
+    <Tab>Custom</Tab>
+    <Tab>TAS</Tab>
+    <Tab>Map</Tab>
+    <Tab>Memory</Tab>
+    <Tab>Options</Tab>
+  </TabOrder>
+  <RemovedTabs>
+    <Tab>PU</Tab>
+    <Tab>Area</Tab>
+    <Tab>Model</Tab>
+    <Tab>Gfx</Tab>
+    <Tab>Debug</Tab>
+    <Tab>Hacks</Tab>
+    <Tab>Cam Hack</Tab>
+    <Tab>Q Frames</Tab>
+    <Tab>Var Hack</Tab>
+    <Tab>Search</Tab>
+    <Tab>Disassembly</Tab>
+    <Tab>Coin</Tab>
+    <Tab>Snow</Tab>
+    <Tab>Main Save</Tab>
+    <Tab>Painting</Tab>
+    <Tab>Sound</Tab>
+    <Tab>Cells</Tab>
+    <Tab>Testing</Tab>
+    <Tab>Music</Tab>
+    <Tab>Script</Tab>
+    <Tab>Warp</Tab>
+  </RemovedTabs>
+</SavedSettings>
