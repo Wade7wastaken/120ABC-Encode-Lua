@@ -230,8 +230,7 @@ end
 local function border(x, y, w, h, thickness, inner_color, border_color)
 	wgui.fillrecta(x - (w / 2), y - (h / 2), w, h, border_color)
 	wgui.fillrecta(x - (w / 2) + thickness, y - (h / 2) + thickness,
-		w - (thickness * 2), h - (thickness * 2),
-		inner_color)
+		w - (thickness * 2), h - (thickness * 2), inner_color)
 end
 
 ---Draws a border around a circle in 2 draws. This function will overwrite the middle of the circle
@@ -265,86 +264,117 @@ end
 ---@param inner_color string The color of the middle of the triangle
 ---@param border_color string The color of the border
 local function triangle(x, y, length, angle, thickness, inner_color, border_color) -- draws a triangle with a border
-	wgui.fillpolygona({{
-		Round(x + (math.cos((math.pi / 2) + angle) * length)),
-		Round(y - (math.sin((math.pi / 2) + angle) * length)),
-	}, {
-		Round(x + (math.cos((7 / 6 * math.pi) + angle) * length)),
-		Round(y - (math.sin((7 / 6 * math.pi) + angle) * length)),
-	}, {
-		Round(x + (math.cos((11 / 6 * math.pi) + angle) * length)),
-		Round(y - (math.sin((11 / 6 * math.pi) + angle) * length)),
-	},}, border_color)
-	wgui.fillpolygona({{
-		Round(x + (math.cos((math.pi / 2) + angle) * (length - thickness))),
-		Round(y - (math.sin((math.pi / 2) + angle) * (length - thickness))),
-	}, {
-		Round(x + (math.cos((7 / 6 * math.pi) + angle) * (length - thickness))),
-		Round(y - (math.sin((7 / 6 * math.pi) + angle) * (length - thickness))),
-	}, {
-		Round(x + (math.cos((11 / 6 * math.pi) + angle) * (length - thickness))),
-		Round(y - (math.sin((11 / 6 * math.pi) + angle) * (length - thickness))),
-	},}, inner_color)
+	wgui.fillpolygona(
+		{
+			{
+				Round(x + (math.cos((math.pi / 2) + angle) * length)),
+				Round(y - (math.sin((math.pi / 2) + angle) * length)),
+			},
+			{
+				Round(x + (math.cos((7 / 6 * math.pi) + angle) * length)),
+				Round(y - (math.sin((7 / 6 * math.pi) + angle) * length)),
+			},
+			{
+				Round(x + (math.cos((11 / 6 * math.pi) + angle) * length)),
+				Round(y - (math.sin((11 / 6 * math.pi) + angle) * length)),
+			},
+		},
+		border_color)
+	wgui.fillpolygona(
+		{
+			{
+				Round(x +
+					(math.cos((math.pi / 2) + angle) * (length - thickness))),
+				Round(y -
+					(math.sin((math.pi / 2) + angle) * (length - thickness))),
+			},
+			{
+				Round(x +
+					(math.cos((7 / 6 * math.pi) + angle) * (length - thickness))),
+				Round(y -
+					(math.sin((7 / 6 * math.pi) + angle) * (length - thickness))),
+			},
+			{
+				Round(x +
+					(math.cos((11 / 6 * math.pi) + angle) * (length - thickness))),
+				Round(y -
+					(math.sin((11 / 6 * math.pi) + angle) * (length - thickness))),
+			},
+		},
+		inner_color)
 end
 
 -- Complex drawing functions
 
-local function button_all(button, button_name, text, ty) -- Draws a button and text
-	if ty == 0 then -- circle
-		if Joypad[button_name] then
-			circle_border(Draw[button].x, Draw[button].y,
-				Draw[button].radius, Draw.buttons.thickness,
-				Draw[button].color,
-				Draw.buttons.border)
-		else
-			circle_border(Draw[button].x, Draw[button].y,
-				Draw[button].radius, Draw.buttons.thickness,
-				Draw.backgrounda,
-				Draw.buttons.border)
+---Draws a circular or square button
+---@param table_name string The name of the table in Draw to draw the button
+---@param joypad_name string The name of the field in the Joypad table
+---@param text any
+---@param type any
+local function button_all(table_name, joypad_name, text, type)
+	if type == 0 then -- circle
+		if Joypad[joypad_name] then -- If the button is being pressed
+			circle_border(
+				Draw[table_name].x, Draw[table_name].y, Draw[table_name].radius,
+				Draw.buttons.thickness, Draw[table_name].color,
+				Draw.buttons.border
+			)
+		else -- if the button isn't being pressed
+			circle_border(
+				Draw[table_name].x, Draw[table_name].y, Draw[table_name].radius,
+				Draw.buttons.thickness, Draw.backgrounda, Draw.buttons.border
+			)
 		end
 	end
-	if ty == 1 then -- square
-		if Joypad[button_name] then
-			border(Draw[button].x, Draw[button].y, Draw[button].w,
-				Draw[button].h, Draw.buttons.thickness,
-				Draw[button].color, Draw.buttons.border)
-		else
-			border(Draw[button].x, Draw[button].y, Draw[button].w,
-				Draw[button].h, Draw.buttons.thickness,
-				Draw.backgrounda
-				, Draw.buttons.border)
+	if type == 1 then -- square
+		if Joypad[joypad_name] then -- If the button is being pressed
+			border(
+				Draw[table_name].x, Draw[table_name].y, Draw[table_name].w,
+				Draw[table_name].h, Draw.buttons.thickness,
+				Draw[table_name].color, Draw.buttons.border
+			)
+		else -- If the button isn't being pressed
+			border(
+				Draw[table_name].x, Draw[table_name].y, Draw[table_name].w,
+				Draw[table_name].h, Draw.buttons.thickness, Draw.backgrounda,
+				Draw.buttons.border
+			)
 		end
 	end
-	wgui.setfont(Draw[button].font_size, Draw[button].font, Draw[button].style)
+	wgui.setfont(Draw[table_name].font_size, Draw[table_name].font,
+		Draw[table_name].style)
 	wgui.setcolor(Draw.buttons.text_color)
 	wgui.drawtext(text,
 		{
-			l = Draw[button].x + Draw[button].x_offset,
-			t = Draw[button].y + Draw[button].y_offset,
+			l = Draw[table_name].x + Draw[table_name].x_offset,
+			t = Draw[table_name].y + Draw[table_name].y_offset,
 			w = 200,
 			h = 100,
 		},
 		"l")
 end
 
-local function cbutton(joypad, offset_mult, angle)
-	if Joypad[joypad] then
+
+local function cbutton(joypad_name, offset_mult, angle)
+	if Joypad[joypad_name] then -- If the button is being pressed
 		circle_border(
 			Draw.cbuttons.x + (Draw.cbuttons.offset * offset_mult[1]),
 			Draw.cbuttons.y + (Draw.cbuttons.offset * offset_mult[2]),
 			Draw.cbuttons.radius, Draw.buttons.thickness,
 			Draw.cbuttons.color, Draw.buttons.border)
-		triangle(Draw.cbuttons.x + (Draw.cbuttons.offset * offset_mult[1]),
+		triangle(
+			Draw.cbuttons.x + (Draw.cbuttons.offset * offset_mult[1]),
 			Draw.cbuttons.y + (Draw.cbuttons.offset * offset_mult[2]),
 			Draw.cbuttons.triangle_size, angle,
 			Draw.cbuttons.triangle_thickness, Draw.cbuttons.color, "black")
-	else
+	else -- If the button isn't being pressed
 		circle_border(
 			Draw.cbuttons.x + (Draw.cbuttons.offset * offset_mult[1]),
 			Draw.cbuttons.y + (Draw.cbuttons.offset * offset_mult[2]),
 			Draw.cbuttons.radius, Draw.buttons.thickness,
 			Draw.backgrounda, Draw.buttons.border)
-		triangle(Draw.cbuttons.x + (Draw.cbuttons.offset * offset_mult[1]),
+		triangle(
+			Draw.cbuttons.x + (Draw.cbuttons.offset * offset_mult[1]),
 			Draw.cbuttons.y + (Draw.cbuttons.offset * offset_mult[2]),
 			Draw.cbuttons.triangle_size, angle,
 			Draw.cbuttons.triangle_thickness, Draw.backgrounda,
@@ -352,11 +382,14 @@ local function cbutton(joypad, offset_mult, angle)
 	end
 end
 
-local function calc_timer(vis) -- converts vi (60 fps) to h:m:s:ms
-	local h = vis // 216000
-	local min = (vis // 3600) - (h * 60)
-	local s = (vis // 60) - (min * 60) - (h * 3600)
-	local ms = Round((vis * 5 / 3) - (s * 100) - (min * 6000) - (h * 360000))
+---Converts the number of vis (60fps) to h:m:s:ms
+---@param vi integer
+---@return string
+local function calc_timer(vi)
+	local h = vi // 216000
+	local min = (vi // 3600) - (h * 60)
+	local s = (vi // 60) - (min * 60) - (h * 3600)
+	local ms = Round((vi * 5 / 3) - (s * 100) - (min * 6000) - (h * 360000))
 	return string.format("%02d:%02d:%02d.%02d", h, min, s, ms)
 end
 
@@ -449,7 +482,7 @@ function Draw.main()
 
 
 	-- Draw buttons
-	button_all("a", "A", "A", 0) -- table name, joypad name, text, type
+	button_all("a", "A", "A", 0)
 	button_all("b", "B", "B", 0)
 	button_all("s", "start", "S", 0)
 	button_all("z", "Z", "Z", 1)
@@ -524,5 +557,6 @@ function Draw.main()
 			t = Draw.apress.y + Draw.apress.offset,
 			w = Screen.extra_width,
 			h = 100,
-		}, "c")
+		},
+		"c")
 end
