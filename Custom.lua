@@ -168,6 +168,55 @@ end
 function memory.LHU(address)
 end
 
+---Loads a signed short (2 bytes) from rdram and returns it. Alias for `memory.readwordsigned`
+---@param address integer The address to read from
+---@return integer value The signed short at `address`
+function memory.LH(address)
+end
+
+---Loads an unsigned long (4 bytes) from rdram and returns it. Alias for `memory.readdword`
+---@param address integer The address to read from
+---@return integer value The unsigned long at `address`
+function memory.LWU(address)
+end
+
+---Loads a signed long (4 bytes) from rdram and returns it. Alias for `memory.readdwordsigned`
+---@param address integer The address to read from
+---@return integer value The signed long at `address`
+function memory.LW(address)
+end
+
+---Loads a unsigned long long (8 bytes) from rdram and returns it in a table of 2 integers. Alias for `memory.readqword`
+---@param address integer The address to read from
+---@return table value A table containing the the upper and lower 4 bytes of the unsigned long long at `address`
+function memory.LDU(address)
+end
+
+---Loads a signed long long (8 bytes) from rdram and returns it in a table of 2 integers. Alias for `memory.readqwordsigned`
+---@param address integer The address to read from
+---@return table value A table containing the the upper and lower 4 bytes of the signed long at `address`
+function memory.LD(address)
+end
+
+---Loads a float (4 bytes) from rdram and returns it. Alias for `memory.readfloat`
+---@param address integer The address to read from
+---@return number value The float at `address`
+function memory.LWC1(address)
+end
+
+---Loads a double (8 bytes) from rdram and returns it. Alias for `memory.readdouble`
+---@param address integer The address to read from
+---@return number value The double at `address`
+function memory.LDC1(address)
+end
+
+---Loads `size` bytes at `address` from rdram and returns it. Alias for `memory.readsize`
+---@param address integer The address to read from
+---@param size integer The size to read. Must be `1`, `2`, `4`, or `8`
+---@return number value `size` bytes at `address`
+function memory.loadsize(address, size)
+end
+
 ---Gets the current width and height of the window
 ---@return {width: integer, height: integer}
 function wgui.info()

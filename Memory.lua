@@ -1,6 +1,10 @@
+---@alias addrlocation {JP: integer, US: integer, size: integer, DisplayName: string}
+---@alias speciallocation {process: (fun(t: table): integer|number|string|table), parameters: string[], DisplayName: string}
+
 Memory = {
 	---@type version
 	version = nil,
+	---@type addrlocation[]
 	addr = {
 		mariox = {
 			JP = 0x80339E3C,
@@ -87,6 +91,7 @@ Memory = {
 			DisplayName = "Object Pool Start Node",
 		},
 	},
+	---@type speciallocation[]
 	special = {
 		-- special memory functions
 		hslidespeed = {
@@ -109,23 +114,26 @@ Memory = {
 		X = {addr = 0xA0, size = 0},
 	},
 }
+
 ---Reads a value from memory. Location is a variable in Memory.addr or Memory.special
 ---@param location string The name of the variable to read from memory
 ---@return integer|number|string|table
 function Memory.read(location)
 	if Memory.addr[location] ~= nil then
-		if Memory.addr[location].size == 0 then
-			return memory.readfloat(Memory.addr[location][Memory.version])
+		local data = Memory.addr[location]
+		if data.size == 0 then
+			return memory.readfloat(data[Memory.version])
 		else
-			return memory.readsize(Memory.addr[location][Memory.version],
-				Memory.addr[location].size)
+			return memory.readsize(data[Memory.version],
+				data.size)
 		end
 	elseif Memory.special[location] ~= nil then
+		local data = Memory.special[location]
 		local t = {}
-		for _, value in ipairs(Memory.special[location].parameters) do
+		for _, value in ipairs(data.parameters) do
 			table.insert(t, Memory.read(value))
 		end
-		return Memory.special[location].process(t)
+		return data.process(t)
 	else
 		print("Failed to find memory location " .. location .. ". Returning 0")
 		return 0
@@ -203,7 +211,7 @@ end
 ---Determines the SM64 version this script is being run on
 ---@return version
 local function determine_version() -- From InputDirection
-	if memory.readsize(0x00B22B24, 4) == 1174429700 then -- JP
+	if memory.readsize(11676452, 4) == 1174429700 then -- JP
 		return "JP"
 	else -- US
 		return "US"
