@@ -1,13 +1,18 @@
--- 640x480
--- 576x432
+
 
 local function f()
-	wgui.loadscreen()
-	wgui.fillrecta(0, 0, 640, 480, "black")
-	wgui.drawimage(1, 40, 12, 576, 432)
-	wgui.deleteimage(0)
-	wgui.fillrecta(0, 0, 640, 480, "black")
-
+	--wgui.loadscreen()
+	--wgui.fillrecta(0, 0, 640, 480, "black")
+	wgui.drawimage(1, 0, 0, 0.5)
+	--wgui.deleteimage(0)
 end
 
-emu.atvi(f)
+local function g()
+	wgui.deleteimage(0)
+	wgui.loadscreen()
+end
+
+wgui.loadscreen()
+
+emu.atinput(f)
+emu.atinput(g)
