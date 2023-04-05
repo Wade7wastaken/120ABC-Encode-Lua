@@ -167,10 +167,9 @@ end
 ---Calculates the points for the "stick" polygon
 ---@return table
 local function calc_stick_points()
-	-- finds the angle the stick makes with the x-axis
-	-- adds and subtracts 2 pi to get the perpendicular angles
-	local jx = Joypad.X * Round(Draw.cstick.size / 2) / 128
-	local jy = Joypad.Y * Round(Draw.cstick.size / 2) / 128
+	-- Normalizes the joystick and multiplies by half of the size of the cstick box to get the coordinates of the endpoint of the joystick
+	local jx = Joypad.X / 128 * Round(Draw.cstick.size / 2)
+	local jy = Joypad.Y / 128 * Round(Draw.cstick.size / 2)
 	local anglep = math.atan(jy, jx) + (math.pi / 2)
 	local anglem = math.atan(jy, jx) - (math.pi / 2)
 	return {
