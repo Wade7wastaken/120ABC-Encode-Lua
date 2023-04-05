@@ -2,7 +2,9 @@
 ---@param x number|integer The number to be rounded
 ---@return integer output The rounded number
 function Round(x)
-	return math.floor(x + 0.5)
+	-- cursed lua ternary operator
+	-- x // 1 can be treated as math.floor(x) but faster
+	return x >= 0 and ((x + 0.5) // 1) or ((x - 0.5) // 1)
 end
 
 ---Copies a table to another table
