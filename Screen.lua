@@ -19,6 +19,7 @@ local function init()
 	Screen.extra_width = Screen.width - Screen.init_width
 	Screen.start = Screen.init_width
 	Screen.middle = Screen.init_width + (Screen.extra_width / 2)
+	Screen.border = Round(Screen.height / 30)
 
 	if DRAWING then
 		Screen.expand()

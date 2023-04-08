@@ -153,6 +153,13 @@ Draw = {
 		style = "a",
 		text_color = "#FFFFFF",
 	},
+	notes = {
+		background = "#000000",
+		width = Round(m * 400),
+		height = Round(m * 250),
+		border_color = "#FFFFFF",
+		border_thickness = Round(m * 4),
+	},
 }
 
 -- Drawing utilities
@@ -558,4 +565,10 @@ function Draw.main()
 			h = 100,
 		},
 		"c")
+
+	border(Round(Draw.notes.width / 2),
+		Screen.border + Round(Draw.notes.height / 2), Draw.notes.width,
+		Draw.notes.height,
+		Draw.notes.border_thickness, Draw.notes.background,
+		Draw.notes.border_color)
 end

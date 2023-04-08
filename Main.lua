@@ -27,6 +27,7 @@ OtherChanges = {}
 AuthorChanges = {}
 AuthorIndices = {}
 SlotIndices = {}
+Notes = {}
 VI = 0
 Frame = 0
 APresses = 0

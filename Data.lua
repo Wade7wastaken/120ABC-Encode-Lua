@@ -24,6 +24,8 @@ AuthorChanges[108776] = "Wade7"
 AuthorChanges[109309] = "70ABC"
 
 
+Notes[300] = {"This run is cool", 100}
+
 ---Loads data defined above into other tables
 local function load_data()
 	---Generates Indicies
