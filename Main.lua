@@ -9,7 +9,6 @@
 	Every function should have annotations giving the types of its parameters and returns
 	A function's description should be put above the annotations
 ]]
-
 ---@alias version "JP"|"US"
 
 -- SETTINGS
