@@ -1,18 +1,21 @@
 
+local record_next_frame = 0
 
-local function f()
-	--wgui.loadscreen()
-	--wgui.fillrecta(0, 0, 640, 480, "black")
+local function vi()
+	if record_next_frame == 1 then
+		wgui.deleteimage(0)
+		wgui.loadscreen()
+		record_next_frame = 0
+	end
 	wgui.drawimage(1, 0, 0, 0.5)
-	--wgui.deleteimage(0)
+	--print("vi")
 end
 
-local function g()
-	wgui.deleteimage(0)
-	wgui.loadscreen()
+local function input()
+	record_next_frame = 1
 end
 
 wgui.loadscreen()
 
-emu.atinput(f)
-emu.atinput(g)
+emu.atvi(vi)
+emu.atinput(input)
