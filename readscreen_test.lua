@@ -1,4 +1,3 @@
-
 local record_next_frame = 0
 
 local function vi()
