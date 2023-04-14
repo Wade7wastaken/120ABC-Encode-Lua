@@ -289,7 +289,7 @@ end
 function wgui.drawtext(text, rect, format)
 end
 
----GDI: Draws a rectangle at the specified coordinates with the current GDI background color and a 1 pixel border of the GDI pen color. 
+---GDI: Draws a rectangle at the specified coordinates with the current GDI background color and a 1 pixel border of the GDI pen color.
 ---@deprecated Use `wgui.fillrect` or `wgui.fillrecta` instead
 ---@param left integer
 ---@param top integer
@@ -342,13 +342,35 @@ end
 function wgui.drawimage(idx, x, y)
 end
 
----Draws the image at index `idx` at the specified coordinates
+---Draws the image at index `idx` at the specified coordinates and scale
+---@param idx integer
+---@param x integer
+---@param y integer
+---@param s number
+function wgui.drawimage(idx, x, y, s)
+end
+
+---Draws the image at index `idx` at the specified coordinates and size
 ---@param idx integer
 ---@param x integer
 ---@param y integer
 ---@param w integer
 ---@param h integer
 function wgui.drawimage(idx, x, y, w, h)
+end
+
+---Draws the image at index `idx` at the specified coordinates, size, and rotation, using a part of the source image given by the `src` parameters
+---@param idx integer
+---@param x integer
+---@param y integer
+---@param w integer
+---@param h integer
+---@param srcx integer
+---@param srcy integer
+---@param srcw integer
+---@param srch integer
+---@param rotate number
+function wgui.drawimage(idx, x, y, w, h, srcx, srcy, srcw, srch, rotate)
 end
 
 ---Loads an image file from `path` and returns the identifier of that image

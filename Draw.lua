@@ -13,8 +13,8 @@ Draw = {
 		stopped_color = "#AAFFAA",
 	},
 	cstick = {
-		x = Screen.start + Round(m * 240), -- 1680
-		y = Round(m * 795),
+		x = Screen.start + Round(m * 165), -- 1680
+		y = Round(m * 720),
 		size = Round(m * 150),
 		circle = {
 			thickness = Round(m * 2),
@@ -36,8 +36,8 @@ Draw = {
 			color = "#3333FFFF",
 		},
 		display = {
-			x_offset = Round(m * 85),
-			y_offset = Round(m * -27),
+			x_offset = Round(m * 160),
+			y_offset = Round(m * 48),
 			distance = Round(m * 30),
 			font_size = Round(m * 24),
 			font = "Courier New",
@@ -51,49 +51,49 @@ Draw = {
 		thickness = Round(m * 4),
 	},
 	a = {
-		x = Screen.start + Round(m * 310), -- 1750
-		y = Round(m * 650),
-		radius = Round(m * 30),
+		x = Screen.start + Round(m * 280), -- 1750
+		y = Round(m * 620),
+		radius = Round(m * 60),
 		color = "#FF7777FF",
 		font_size = Round(m * 32),
 		font = "Calibri",
 		style = "a",
-		x_offset = Round(m * -11),
-		y_offset = Round(m * -27),
+		x_offset = Round(m * 18),
+		y_offset = Round(m * 3),
 	},
 	b = {
-		x = Screen.start + Round(m * 240), -- 1680
-		y = Round(m * 650),
-		radius = Round(m * 30),
+		x = Screen.start + Round(m * 210), -- 1680
+		y = Round(m * 620),
+		radius = Round(m * 60),
 		color = "#00C000FF",
 		font_size = Round(m * 32),
 		font = "Calibri",
 		style = "a",
-		x_offset = Round(m * -11),
-		y_offset = Round(m * -27),
+		x_offset = Round(m * 18),
+		y_offset = Round(m * 3),
 	},
 	s = {
-		x = Screen.start + Round(m * 275), -- 1715
-		y = Round(m * 590),
-		radius = Round(m * 30),
+		x = Screen.start + Round(m * 245), -- 1715
+		y = Round(m * 560),
+		radius = Round(m * 60),
 		color = "#4444FFFF",
 		font_size = Round(m * 32),
 		font = "Calibri",
 		style = "a",
-		x_offset = Round(m * -9),
-		y_offset = Round(m * -27),
+		x_offset = Round(m * 20),
+		y_offset = Round(m * 3),
 	},
 	z = {
-		x = Screen.start + Round(m * 160), -- 1600
-		y = Round(m * 630),
+		x = Screen.start + Round(m * 135), -- 1600
+		y = Round(m * 580),
 		w = Round(m * 50),
 		h = Round(m * 100),
 		color = "#888888FF",
 		font_size = Round(m * 32),
 		font = "Calibri",
 		style = "a",
-		x_offset = Round(m * -11),
-		y_offset = Round(m * -27),
+		x_offset = Round(m * 15),
+		y_offset = Round(m * 20),
 	},
 	cbuttons = {
 		x = Screen.start + Round(m * 180), -- 1620
@@ -110,16 +110,16 @@ Draw = {
 		triangle_size = Round(m * 12),
 	},
 	r = {
-		x = Screen.start + Round(m * 310), -- 1750
-		y = Round(m * 500),
+		x = Screen.start + Round(m * 260), -- 1750
+		y = Round(m * 475),
 		w = Round(m * 100),
 		h = Round(m * 50),
 		color = "#888888FF",
 		font_size = Round(m * 32),
 		font = "Calibri",
 		style = "a",
-		x_offset = Round(m * -11),
-		y_offset = Round(m * -27),
+		x_offset = Round(m * 38),
+		y_offset = Round(m * -1),
 	},
 	apress = {
 		y = Round(m * 50),
@@ -159,6 +159,8 @@ Draw = {
 		height = Round(m * 250),
 		border_color = "#FFFFFF",
 		border_thickness = Round(m * 4),
+		current_offset = 0,
+		state = 0, -- 0: hidden, 1: expanding, 2: displaying, 3: retracting
 	},
 }
 
@@ -181,27 +183,27 @@ local function calc_stick_points()
 	local anglem = math.atan(jy, jx) - (math.pi / 2)
 	return {
 		{
-			Round(Draw.cstick.x +
+			Round(Draw.cstick.x + (Draw.cstick.size / 2) +
 				(math.cos(anglep) * Draw.cstick.stick.thickness)),
-			Round(Draw.cstick.y -
+			Round(Draw.cstick.y + (Draw.cstick.size / 2) -
 				(math.sin(anglep) * Draw.cstick.stick.thickness)),
 		},
 		{
-			Round(Draw.cstick.x +
+			Round(Draw.cstick.x + (Draw.cstick.size / 2) +
 				(math.cos(anglep) * Draw.cstick.stick.thickness) + jx),
-			Round(Draw.cstick.y -
+			Round(Draw.cstick.y + (Draw.cstick.size / 2) -
 				(math.sin(anglep) * Draw.cstick.stick.thickness) - jy),
 		},
 		{
-			Round(Draw.cstick.x +
+			Round(Draw.cstick.x + (Draw.cstick.size / 2) +
 				(math.cos(anglem) * Draw.cstick.stick.thickness) + jx),
-			Round(Draw.cstick.y -
+			Round(Draw.cstick.y + (Draw.cstick.size / 2) -
 				(math.sin(anglem) * Draw.cstick.stick.thickness) - jy),
 		},
 		{
-			Round(Draw.cstick.x +
+			Round(Draw.cstick.x + (Draw.cstick.size / 2) +
 				(math.cos(anglem) * Draw.cstick.stick.thickness)),
-			Round(Draw.cstick.y -
+			Round(Draw.cstick.y + (Draw.cstick.size / 2) -
 				(math.sin(anglem) * Draw.cstick.stick.thickness)),
 		},
 	}
@@ -210,33 +212,30 @@ end
 -- Shape drawing functions
 
 ---Draws a border around a rectangle using 4 draws, but doesn't overwrite the middle. The border is drawn on the inside of the rectangle
----@param x integer The x-coordinate in pixels of the middle of the rectangle from the top left of the screen
----@param y integer The y-coordinate in pixels of the middle of the rectangle from the top left of the screen
----@param w integer The width of the rectangle in pixels
----@param h integer The height of the rectangle in pixels
----@param thickness integer The size of the border in pixels. The border is drawn completely inside the rectangle
----@param color string The color of the border
-local function border_transparent(x, y, w, h, thickness, color)
-	wgui.fillrecta(x - (w / 2), y - (h / 2), thickness, h, color)
-	wgui.fillrecta(x - (w / 2) + thickness, y + (h / 2) - thickness,
-		w - (thickness * 2), thickness, color)
-	wgui.fillrecta(x + (w / 2) - thickness, y - (h / 2), thickness, h, color)
-	wgui.fillrecta(x - (w / 2) + thickness, y - (h / 2), w - (thickness * 2),
-		thickness, color)
+---@param x integer
+---@param y integer
+---@param w integer
+---@param h integer
+---@param t integer
+---@param color string
+local function border_transparent(x, y, w, h, t, color)
+	wgui.fillrecta(x, y, t, h, color)
+	wgui.fillrecta(x + t, y + h - t, w - (2 * t), t, color)
+	wgui.fillrecta(x + w - t, y, t, h, color)
+	wgui.fillrecta(x + t, y, w - (2 * t), t, color)
 end
 
 ---Draws a border around a rectangle using 2 draws. This function will overwrite the middle of the rectangle. The border is drawn on the inside of the rectangle
----@param x integer The x-coordinate in pixels of the middle of the rectangle from the top left of the screen
----@param y integer The y-coordinate in pixels of the middle of the rectangle from the top left of the screen
----@param w integer The width of the rectangle in pixels
----@param h integer The height of the rectangle in pixels
----@param thickness integer The size of the border in pixels. The border is drawn completely inside the rectangle
----@param inner_color string The color of the overwritten middle part of the rectangle
----@param border_color string The color of the border
-local function border(x, y, w, h, thickness, inner_color, border_color)
-	wgui.fillrecta(x - (w / 2), y - (h / 2), w, h, border_color)
-	wgui.fillrecta(x - (w / 2) + thickness, y - (h / 2) + thickness,
-		w - (thickness * 2), h - (thickness * 2), inner_color)
+---@param x integer
+---@param y integer
+---@param w integer
+---@param h integer
+---@param t integer
+---@param inner_color string
+---@param border_color string
+local function border(x, y, w, h, t, inner_color, border_color)
+	wgui.fillrecta(x, y, w, h, border_color)
+	wgui.fillrecta(x + t, y + t, w - (2 * t), h - (2 * t), inner_color)
 end
 
 ---Draws a border around a circle in 2 draws. This function will overwrite the middle of the circle
@@ -250,6 +249,11 @@ local function circle_border(x, y, r, thickness, inner_color, border_color)
 	wgui.fillellipsea(x - r, y - r, r * 2, r * 2, border_color)
 	wgui.fillellipsea(x - r + thickness, y - r + thickness, (r - thickness) * 2,
 		(r - thickness) * 2, inner_color)
+end
+
+local function circle_border2(x, y, d, t, inner_color, border_color)
+	wgui.fillellipsea(x, y, d, d, border_color)
+	wgui.fillellipsea(x + t, y + t, d - (t * 2), d - (t * 2), inner_color)
 end
 
 ---Draws a filled in circle
@@ -320,13 +324,13 @@ end
 local function button_all(table_name, joypad_name, text, type)
 	if type == 0 then -- circle
 		if Joypad[joypad_name] then -- If the button is being pressed
-			circle_border(
+			circle_border2(
 				Draw[table_name].x, Draw[table_name].y, Draw[table_name].radius,
 				Draw.buttons.thickness, Draw[table_name].color,
 				Draw.buttons.border
 			)
 		else -- if the button isn't being pressed
-			circle_border(
+			circle_border2(
 				Draw[table_name].x, Draw[table_name].y, Draw[table_name].radius,
 				Draw.buttons.thickness, Draw.backgrounda, Draw.buttons.border
 			)
@@ -435,18 +439,17 @@ function Draw.main()
 
 
 	-- Draw c stick
-	circle_border(Draw.cstick.x, Draw.cstick.y, Draw.cstick.size / 2,
+	circle_border2(Draw.cstick.x, Draw.cstick.y, Draw.cstick.size,
 		Draw.cstick.circle.thickness, Draw.background,
 		Draw.cstick.circle.color)
 
 	-- Draw axes
 	wgui.setpen(Draw.cstick.axis.color)
-	wgui.line(Draw.cstick.x - (Draw.cstick.size / 2), Draw.cstick.y,
-		Draw.cstick.x + (Draw.cstick.size / 2),
-		Draw.cstick.y)
-	wgui.line(Draw.cstick.x, Draw.cstick.y - (Draw.cstick.size / 2),
-		Draw.cstick.x,
-		Draw.cstick.y + (Draw.cstick.size / 2))
+
+	wgui.line(Draw.cstick.x, Draw.cstick.y + (Draw.cstick.size / 2),
+		Draw.cstick.x + Draw.cstick.size, Draw.cstick.y + (Draw.cstick.size / 2))
+	wgui.line(Draw.cstick.x + (Draw.cstick.size / 2), Draw.cstick.y,
+		Draw.cstick.x + (Draw.cstick.size / 2), Draw.cstick.y + Draw.cstick.size)
 
 	-- Draw border
 	border_transparent(Draw.cstick.x, Draw.cstick.y, Draw.cstick.size,
@@ -461,8 +464,10 @@ function Draw.main()
 
 	-- Draw ball
 	fill_circle(
-		Draw.cstick.x + (Joypad.X * Round(Draw.cstick.size / 2) / 128),
-		Draw.cstick.y - (Joypad.Y * Round(Draw.cstick.size / 2) / 128),
+		Draw.cstick.x + (Draw.cstick.size / 2) +
+		(Joypad.X * Round(Draw.cstick.size / 2) / 128),
+		Draw.cstick.y + (Draw.cstick.size / 2) -
+		(Joypad.Y * Round(Draw.cstick.size / 2) / 128),
 		Draw.cstick.ball.radius, Draw.cstick.ball.color)
 
 	-- Draw c stick display
@@ -566,9 +571,21 @@ function Draw.main()
 		},
 		"c")
 
-	border(Round(Draw.notes.width / 2),
-		Screen.border + Round(Draw.notes.height / 2), Draw.notes.width,
-		Draw.notes.height,
-		Draw.notes.border_thickness, Draw.notes.background,
-		Draw.notes.border_color)
+
+	if Notes[VI] ~= nil then
+		Draw.notes.state = 1
+	end
+	--print(Notes[VI])
+	--print(VI)
+
+	if Draw.notes.state == 1 then
+		--border(Round(Draw.notes.width / 2),
+		--Screen.border + Round(Draw.notes.height / 2), Draw.notes.width,
+		--Draw.notes.height,
+		--Draw.notes.border_thickness, Draw.notes.background,
+		--Draw.notes.border_color)
+	end
+
+	--wgui.drawimage(Image.get("mario"), 0, 0, 100, 100, 0, 0, 100, 100, VI)
+	--wgui.drawimage(Image.get("castle_grounds"), 0, 0, 0.1)
 end

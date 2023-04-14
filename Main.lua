@@ -43,7 +43,7 @@ dofile(Path .. "Screen.lua")
 dofile(Path .. "Memory.lua")
 dofile(Path .. "Draw.lua")
 --dofile(Path .. "Map.lua")
---dofile(Path .. "Image.lua")
+dofile(Path .. "Image.lua")
 dofile(Path .. "AtFunctions.lua")
 
 emu.atinterval(AtInterval) -- ran continuously
