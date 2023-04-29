@@ -4,7 +4,7 @@
 function Round(x)
 	-- cursed lua ternary operator
 	-- x // 1 can be treated as math.floor(x) but faster
-	return x >= 0 and ((x + 0.5) // 1) or ((x - 0.5) // 1)
+	return x >= 0 and math.floor(x + 0.5) or math.floor(x - 0.5)
 end
 
 ---Copies a table to another table
