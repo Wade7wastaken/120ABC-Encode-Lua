@@ -23,5 +23,9 @@
 	"python.formatting.provider": "none",
 	"[python]": {
 		"editor.defaultFormatter": "ms-python.autopep8"
-	}
+	},
+	"Lua.diagnostics.ignoredFiles": "Disable",
+	"Lua.workspace.ignoreDir": [
+		"wafelread/output.lua"
+	]
 }
