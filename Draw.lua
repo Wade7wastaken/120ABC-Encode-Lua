@@ -364,8 +364,10 @@ end
 local function cbutton(joypad_name, offset_mult, angle)
 	if Joypad[joypad_name] then -- If the button is being pressed
 		circle_border(
-			Draw.cbuttons.x - (Draw.cbuttons.radius) + (Draw.cbuttons.offset * offset_mult[1]),
-			Draw.cbuttons.y - (Draw.cbuttons.radius) + (Draw.cbuttons.offset * offset_mult[2]),
+			Draw.cbuttons.x - (Draw.cbuttons.radius) +
+			(Draw.cbuttons.offset * offset_mult[1]),
+			Draw.cbuttons.y - (Draw.cbuttons.radius) +
+			(Draw.cbuttons.offset * offset_mult[2]),
 			Draw.cbuttons.radius, Draw.buttons.thickness,
 			Draw.cbuttons.color, Draw.buttons.border)
 		triangle(
@@ -375,8 +377,10 @@ local function cbutton(joypad_name, offset_mult, angle)
 			Draw.cbuttons.triangle_thickness, Draw.cbuttons.color, "black")
 	else -- If the button isn't being pressed
 		circle_border(
-			Draw.cbuttons.x - (Draw.cbuttons.radius) + (Draw.cbuttons.offset * offset_mult[1]),
-			Draw.cbuttons.y - (Draw.cbuttons.radius) + (Draw.cbuttons.offset * offset_mult[2]),
+			Draw.cbuttons.x - (Draw.cbuttons.radius) +
+			(Draw.cbuttons.offset * offset_mult[1]),
+			Draw.cbuttons.y - (Draw.cbuttons.radius) +
+			(Draw.cbuttons.offset * offset_mult[2]),
 			Draw.cbuttons.radius, Draw.buttons.thickness,
 			Draw.backgrounda, Draw.buttons.border)
 		triangle(

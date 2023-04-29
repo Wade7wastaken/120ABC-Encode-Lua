@@ -4,7 +4,7 @@ Image = {
 	},
 	alias = {
 		mario = Path .. "Images/Mario Top.png",
-		castle_grounds = Path .. "Images/Castle Grounds.png"
+		castle_grounds = Path .. "Images/Castle Grounds.png",
 	},
 	poolsize = 0,
 	poolsizelimit = 50,

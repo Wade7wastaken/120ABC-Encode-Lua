@@ -86,12 +86,12 @@ function Map.draw()
 				local v = imagesize / (data.w * data.data.zoom)
 				wgui.drawimage(Image.get(fname),
 					Round((
-						((((imagesize / (2 * data.data.zoom)) - data.data.x) / v) + data.x) +
-						((375 * (Memory.read("mariox") + 8191)) / (4096 * v))) -
+							((((imagesize / (2 * data.data.zoom)) - data.data.x) / v) + data.x) +
+							((375 * (Memory.read("mariox") + 8191)) / (4096 * v))) -
 						(Image.getinfo(fname).width * iconscale / 2)),
 					Round((
-						((((imagesize / (2 * ar * data.data.zoom)) - data.data.y) / v) + data.y) +
-						((375 * (Memory.read("marioz") + 8191)) / (4096 * v))) -
+							((((imagesize / (2 * ar * data.data.zoom)) - data.data.y) / v) + data.y) +
+							((375 * (Memory.read("marioz") + 8191)) / (4096 * v))) -
 						(Image.getinfo(fname).height * iconscale / 2)),
 					iconscale)
 			end
