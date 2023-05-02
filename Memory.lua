@@ -115,6 +115,31 @@ Memory = {
 	},
 }
 
+
+---comment
+---@param location string
+function Memory.readwafel(location)
+	local addr = 0
+	local parts = SplitString(location, ".")
+	local data = WafelData.globals[parts[1]]
+
+	if data.kind == "Pointer" then
+		addr = data.address
+	end
+
+	WafelData.globals.gMarioState.data_type.kind
+
+	
+end
+
+function Memory.iterate(data)
+	if data.kind == "Pointer" then
+		
+	elseif data.kind == "Array" then
+
+	elseif data.king == "Float" then
+end
+
 ---Reads a value from memory. Location is a variable in Memory.addr or Memory.special
 ---@param location string The name of the variable to read from memory
 ---@return integer|number|string|table

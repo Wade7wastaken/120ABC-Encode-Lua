@@ -46,10 +46,14 @@ end
 
 ---Splits a string into words at every whitespace character
 ---@param s string The input string to split
+---@param sep string?
 ---@return table word_table A linear table of all the words in the input string
-function SplitString(s)
+function SplitString(s, sep)
+	if sep == nil then
+		sep = "%s"
+	end
 	local t = {}
-	for str in string.gmatch(s, "([^%s]+)") do -- split the string into a table
+	for str in string.gmatch(s, "([^" .. sep .. "]+)") do -- split the string into a table
 		table.insert(t, str)
 	end
 	return t
