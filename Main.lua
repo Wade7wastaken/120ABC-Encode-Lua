@@ -48,6 +48,8 @@ dofile(Path .. "Draw.lua")
 dofile(Path .. "Image.lua")
 dofile(Path .. "AtFunctions.lua")
 
+print(Memory.readwafel("gMarioState.numCoins"))
+
 emu.atinterval(AtInterval) -- ran continuously
 emu.atvi(AtVI) -- ran every visual interrupt (DRAWING happens here)
 emu.atinput(AtInput) -- ran every input frame

@@ -35,6 +35,9 @@ end
 
 ---This function is run for every input frame
 function AtInput()
+	--print(memory.readsize(
+	--memory.readsize(WafelData.globals.gMarioState.address, 4) +
+	--WafelData.type_defns["struct MarioState"].data.fields.action.offset, 4))
 	Frame = emu.samplecount() + 1 -- ¯\_(ツ)_/¯
 	Joypad = joypad.get(1) -- get the joypad input from the first controller
 	if Joypad.A and not PreviousJoypad.A then -- a press counter logic (cant use input.diff for some reason)

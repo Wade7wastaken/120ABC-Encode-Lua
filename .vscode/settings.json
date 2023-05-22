@@ -15,9 +15,17 @@
 		"insert_final_newline": "true",
 		"align_continuous_inline_comment": "false",
 		"space_around_table_field_list": "false",
-		"space_before_attribute": "false",
+		"space_before_attribute": "false"
 	},
 	"Lua.diagnostics.neededFileStatus": {
 		"codestyle-check": "Any"
-	}
+	},
+	"python.formatting.provider": "none",
+	"[python]": {
+		"editor.defaultFormatter": "ms-python.autopep8"
+	},
+	"Lua.diagnostics.ignoredFiles": "Disable",
+	"Lua.workspace.ignoreDir": [
+		"wafelread/output.lua"
+	]
 }
