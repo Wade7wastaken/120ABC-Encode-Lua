@@ -233,6 +233,7 @@ end
 
 -- colors can be any of these or "#RGB", "#RGBA", "#RRGGBB", or "#RRGGBBA"
 ---@alias color
+---| string
 ---| "white"
 ---| "black"
 ---| "clear"
@@ -248,22 +249,22 @@ end
 ---| "purple"
 
 ---GDI: Sets the current GDI brush color to `color`
----@param color color|string
+---@param color color
 function wgui.setbrush(color)
 end
 
 ---GDI: Sets the current GDI pen color to `color`
----@param color color|string
+---@param color color
 function wgui.setpen(color)
 end
 
 ---GDI: Sets the current GDI text color to `color`
----@param color color|string
+---@param color color
 function wgui.setcolor(color)
 end
 
 ---GDI: Sets the current GDI background color to `color`
----@param color color|string
+---@param color color
 function wgui.setbk(color)
 end
 
@@ -335,6 +336,17 @@ end
 function wgui.fillpolygona(points, color)
 end
 
+---Loads an image file from `path` and returns the identifier of that image
+---@param path string
+---@return integer
+function wgui.loadimage(path)
+end
+
+---Clears one of all images
+---@param idx integer The identifier of the image to clear. If it is 0, clear all iamges
+function wgui.deleteimage(idx)
+end
+
 ---Draws the image at index `idx` at the specified coordinates
 ---@param idx integer
 ---@param x integer
@@ -373,10 +385,19 @@ end
 function wgui.drawimage(idx, x, y, w, h, srcx, srcy, srcw, srch, rotate)
 end
 
----Loads an image file from `path` and returns the identifier of that image
----@param path string
----@return integer
-function wgui.loadimage(path)
+---Captures the current screen and saves it as an image
+---@return integer The identifier of the saved image
+function wgui.loadscreen()
+end
+
+---Re-initializes loadscreen
+function wgui.loadscreenreset()
+end
+
+---Returns the width and height of the image at `idx`
+---@param idx integer
+---@return {width: integer, height: integer}
+function wgui.getimageinfo(idx)
 end
 
 ---Draws an ellipse at the specified coordinates and size. Uses the GDI brush color for the background and a 1 pixel border of the GDI pen color
@@ -412,3 +433,27 @@ function wgui.resize(w, h)
 end
 
 --#endregion
+
+--input Functions
+--#region
+
+---Returns a table of booleans corresponding to which keys are pressed
+---@return table
+function input.get()
+end
+
+---Gets the difference in two input tables
+---@param t1 table
+---@param t2 table
+---@return table
+function input.diff(t1, t2)
+end
+
+---Unknown
+function input.prompt()
+end
+
+--#endregion
+
+--joypad Functions
+--#region

@@ -51,5 +51,5 @@ function Image.getinfo(fname)
 	if Image.pool[name] == nil then
 		Image.pool[name] = wgui.loadimage(name)
 	end
-	return wgui.getimageinfo(Image[name])
+	return wgui.getimageinfo(Image.pool[name])
 end
