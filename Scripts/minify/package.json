@@ -1,0 +1,13 @@
+{
+	"name": "minify",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"dependencies": {
+		"fs": "^0.0.1-security",
+		"luamin": "^1.0.4"
+	}
+}

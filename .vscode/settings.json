@@ -2,7 +2,6 @@
 	"cSpell.enableFiletypes": ["lua"],
 	"cSpell.diagnosticLevel": "Hint",
 	"workbench.colorCustomizations": {
-		// changees the color of three dots to red
 		"editorHint.foreground": "#ff5a5aa0"
 	},
 	"Lua.format.defaultConfig": {
@@ -20,10 +19,11 @@
 	"Lua.diagnostics.neededFileStatus": {
 		"codestyle-check": "Any"
 	},
-	"python.formatting.provider": "none",
+	"Lua.diagnostics.ignoredFiles": "Disable",
+	"Lua.workspace.ignoreDir": ["wafelread"],
+	"files.encoding": "utf8",
 	"[python]": {
 		"editor.defaultFormatter": "ms-python.autopep8"
 	},
-	"Lua.diagnostics.ignoredFiles": "Disable",
-	"Lua.workspace.ignoreDir": ["wafelread/output.lua"]
+	"python.formatting.provider": "none" // important for minify script
 }
