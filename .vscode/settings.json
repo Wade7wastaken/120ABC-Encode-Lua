@@ -20,7 +20,7 @@
 		"codestyle-check": "Any"
 	},
 	"Lua.diagnostics.ignoredFiles": "Disable",
-	"Lua.workspace.ignoreDir": ["wafelread"],
+	"Lua.workspace.ignoreDir": ["Scripts/wafellayout"],
 	"files.encoding": "utf8",
 	"[python]": {
 		"editor.defaultFormatter": "ms-python.autopep8"
