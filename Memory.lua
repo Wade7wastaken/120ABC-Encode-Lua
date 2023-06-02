@@ -2,6 +2,31 @@
 ---@alias speciallocation {process: (fun(t: table): integer|number|string|table), parameters: string[], DisplayName: string}
 
 Memory = {
+	allowedMemorySizes = {
+		[0] = true,
+		[1] = true,
+		[2] = true,
+		[4] = true,
+		[8] = true,
+		[9] = true,
+	}, -- only sets 1, 2, 4, and 8 true
+	wafelDataHelpers = {
+		intSizes = {
+			U8 = 1,
+			U16 = 2,
+			U32 = 4,
+			U64 = 8,
+			S8 = -1,
+			S16 = -2,
+			S32 = -4,
+			S64 = -8,
+		},
+		floatSizes = {
+			F32 = 0,
+			F64 = 9,
+		},
+	},
+	cache = {},
 	---@type version
 	version = nil,
 	---@type addrlocation[]
@@ -116,24 +141,94 @@ Memory = {
 }
 
 
----comment
----@param location string
-function Memory.readwafel(location)
-	local addr = 0
-	local parts = SplitString(location, ".")
-	local data = WafelData.globals[parts[1]]
-
-	if data.kind == "Pointer" then
-		addr = data.address
+function Memory.smartread(addr, size)
+	local cacheID = tostring(addr) .. " " .. tostring(size)
+	local cache = Memory.cache[cacheID]
+	if cache ~= nil then
+		return cache
+	end
+	if Memory.allowedMemorySizes[math.abs(size)] == nil then
+		print("Unsupported size " .. size .. ". Size must be 0, 1, 2, 4, 8, or 9")
+	end
+	if size == 0 then
+		local result = memory.readfloat(addr)
+		Memory.cache[cacheID] = result
+		return result
+	elseif size == 9 then
+		local result = memory.readdouble(addr)
+		Memory.cache[cacheID] = result
+		return result
+	elseif size > 0 then
+		local result = memory.readsize(addr, size)
+		Memory.cache[cacheID] = result
+		return result
+	else
+		if size == -1 then
+			local result = memory.readbytesigned(addr)
+			Memory.cache[cacheID] = result
+			return result
+		elseif size == -2 then
+			local result = memory.readwordsigned(addr)
+			Memory.cache[cacheID] = result
+			return result
+		elseif size == -4 then
+			local result = memory.readdwordsigned(addr)
+			Memory.cache[cacheID] = result
+			return result
+		elseif size == -8 then
+			local result = memory.readqwordsigned(addr)
+			Memory.cache[cacheID] = result
+			return result
+		end
 	end
 end
 
-function Memory.iterate(data)
-	if data.kind == "Pointer" then
+---comment
+---@param location string
+function Memory.readwafel(location)
+	--print(memory.readsize(
+	--memory.readsize(WafelData.globals.gMarioState.address, 4) + 168, 2))
 
-	elseif data.kind == "Array" then
+	---@alias data_type_structure {kind: string, data: table|string}
+	---@alias global_var_structure {data_type: data_type_structure, address: integer}
 
-	elseif data.king == "Float" then
+	local parts = SplitString(location, ".%[%]")
+
+	local partCounter = 2 -- start at 2 because 1 is used to find global
+	---@type global_var_structure
+	local globalVar = WafelData.globals[parts[1]]
+	---@type data_type_structure
+	local data_type = globalVar.data_type
+	local addr = globalVar.address
+
+	for i = 1, 100, 1 do -- ill replace this with a proper infinite loop when there aren't any more bugs
+		--print(data_type)
+		--print()
+
+		if data_type.kind == "Pointer" then
+			addr = Memory.smartread(addr, 4)
+			data_type = data_type.data.base
+		elseif data_type.kind == "Struct" then
+			local field = data_type.data.fields[parts[partCounter]]
+			partCounter = partCounter + 1
+			addr = addr + field.offset
+			data_type = field.data_type
+		elseif data_type.kind == "Name" then
+			data_type = WafelData.type_defns[data_type.data]
+		elseif data_type.kind == "Array" then
+			--print(IsInteger(parts[partCounter]))
+			addr = addr + data_type.data.stride * tonumber(parts[partCounter])
+			partCounter = partCounter + 1
+			data_type = data_type.data.base
+		elseif data_type.kind == "Float" then
+			return Memory.smartread(addr,
+				Memory.wafelDataHelpers.floatSizes[data_type.data])
+		elseif data_type.kind == "Int" then
+			return Memory.smartread(addr,
+				Memory.wafelDataHelpers.intSizes[data_type.data])
+		elseif data_type.kind == "Void" then
+			return nil
+		end
 	end
 end
 

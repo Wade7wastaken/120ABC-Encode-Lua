@@ -40,14 +40,13 @@ PreviousJoypad = {A = false}
 
 Path = debug.getinfo(1).source:sub(2):match("(.*\\)") -- From InputDirection
 dofile(Path .. "Misc.lua")
---dofile(Path .. "Data.lua")
-dofile(Path .. "Screen.lua")
 dofile(Path .. "Memory.lua")
+dofile(Path .. "Data.lua")
+dofile(Path .. "Screen.lua")
 dofile(Path .. "Draw.lua")
 --dofile(Path .. "Map.lua")
 dofile(Path .. "Image.lua")
 dofile(Path .. "AtFunctions.lua")
-
 
 emu.atinterval(AtInterval) -- ran continuously
 emu.atvi(AtVI) -- ran every visual interrupt (DRAWING happens here)

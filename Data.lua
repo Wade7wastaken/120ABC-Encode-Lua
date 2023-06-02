@@ -29,7 +29,9 @@ Notes[300] = {"This run is cool", 100}
 ---Loads data defined above into other tables
 local function load_data()
 	-- load external data
-	dofile(Path .. "wafelread/output.lua")
+	dofile(Path ..
+		"Scripts/wafellayout/output/layout_" ..
+		string.lower(Memory.version) .. ".lua")
 
 	---Generates Indicies
 	---@param in_table table

@@ -58,3 +58,7 @@ function SplitString(s, sep)
 	end
 	return t
 end
+
+function IsInteger(str)
+	return not (str == "" or str:find("%D")) -- str:match("%D") also works
+end

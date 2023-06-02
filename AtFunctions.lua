@@ -35,6 +35,13 @@ end
 
 ---This function is run for every input frame
 function AtInput()
+
+	-- clear the memory cache
+	Memory.cache = {}
+
+	print(Memory.readwafel("gMarioState.pos[0]"))
+	--print(Memory.readwafel("gMarioState.numCoins"))
+
 	--print(memory.readsize(
 	--memory.readsize(WafelData.globals.gMarioState.address, 4) +
 	--WafelData.type_defns["struct MarioState"].data.fields.action.offset, 4))
